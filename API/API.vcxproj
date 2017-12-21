@@ -23,13 +23,13 @@
     <ProjectGuid>{59203EEB-DCB7-4983-8D94-2C40F380BA48}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>API</RootNamespace>
-    <WindowsTargetPlatformVersion />
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -89,10 +89,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;API_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Projekte\CPP\API\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Projekte\CPP\API\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,12 +146,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="API.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientMessage.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="PacketData.h" />
+    <ClInclude Include="PacketIdentifier.h" />
+    <ClInclude Include="PacketTypeData.h" />
+    <ClInclude Include="PacketTypeIdentifier.h" />
+    <ClInclude Include="SerializeableQueue.h" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="ServerAPIGeneral.h" />
+    <ClInclude Include="SharedFont.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientMessage.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="PacketData.cpp" />
+    <ClCompile Include="PacketIdentifier.cpp" />
+    <ClCompile Include="PacketTypeData.cpp" />
+    <ClCompile Include="PacketTypeIdentifier.cpp" />
+    <ClCompile Include="SerializeableQueue.cpp" />
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerAPIGeneral.cpp" />
+    <ClCompile Include="SharedFont.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
