@@ -12,6 +12,8 @@ public:
 	void WriteFloat(float f);
 	void WriteBoolean(bool b);
 	void WriteString(const std::wstring &s);
+	void WriteRawBytes(std::vector<BYTE> &bytes);
+	void WriteRawByte(BYTE b);
 
 	int ReadInteger();
 	float ReadFloat();

@@ -2,12 +2,18 @@
 #include "ClientMessage.h"
 #include "API.h"
 
-ClientMessage::ClientMessage()
+ClientMessage::ClientMessage(PacketIdentifier identifier)
 {
+	_in.WriteInteger((int)identifier);
 }
 
 ClientMessage::~ClientMessage()
 {
+}
+
+void ClientMessage::SetResponse(std::shared_ptr<SerializeableQueue> response)
+{
+	_out = response;
 }
 
 SerializeableQueue & ClientMessage::GetInput()
@@ -15,7 +21,7 @@ SerializeableQueue & ClientMessage::GetInput()
 	return _in;
 }
 
-SerializeableQueue & ClientMessage::GetResponse(PacketIdentifier identifier)
+std::shared_ptr<SerializeableQueue> ClientMessage::GetResponse()
 {
 	return _out;
 }

@@ -3,12 +3,12 @@
 
 #define DllPublic   __declspec( dllexport )
 
-static Client g_client;
+static std::shared_ptr<Client> g_client;
 
 namespace API
 {
 	DllPublic int Initialize(const wchar_t *path, const wchar_t *file);
-	DllPublic int ResetInitialize();
+	DllPublic void ResetInitialize();
 
 	namespace Other
 	{
@@ -56,6 +56,8 @@ namespace API
 
 	namespace Player
 	{
+		DllPublic int GetHealth();
+		DllPublic int GetArmor();
 	}
 
 	namespace Vehicle

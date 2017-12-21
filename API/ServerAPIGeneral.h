@@ -4,5 +4,5 @@
 static class ServerAPIGeneral
 {
 public:
-	void Useless(SerializeableQueue &in, SerializeableQueue &out);
+	static void Useless(SerializeableQueue &in, SerializeableQueue &out);
 };

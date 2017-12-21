@@ -1,3 +1,7 @@
 #pragma once
 
-enum PacketIdentifier;
+enum PacketIdentifier
+{
+	Useless,
+	Useless1
+};

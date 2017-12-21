@@ -4,12 +4,14 @@ using System.Threading;
 
 namespace Example
 {
-    class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
             // SAMP is open
-            GeneralAPI.Instance.Initialize();
+            int result = GeneralAPI.Instance.Initialize();
+
+            int id = GeneralAPI.Instance.GetWeatherID();
 
             Thread.Sleep(500);
 
