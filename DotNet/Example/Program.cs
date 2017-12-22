@@ -11,7 +11,15 @@ namespace Example
             // SAMP is open
             int result = GeneralAPI.Instance.Initialize();
 
-            int id = GeneralAPI.Instance.GetWeatherID();
+            var d = DialogAPI.Instance;
+            var c = ChatAPI.Instance;
+            var p = PlayerAPI.Instance;
+            var v = VehicleAPI.Instance;
+            var b = BoxAPI.Instance;
+            var t = TextAPI.Instance;
+
+            var ps = SAPI.SAMP.PlayerAPI.Instance;
+            var vs = SAPI.SAMP.VehicleAPI.Instance;
 
             Thread.Sleep(500);
 

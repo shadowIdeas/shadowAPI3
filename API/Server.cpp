@@ -22,6 +22,7 @@ Server::~Server()
 void Server::RegisterFunctions()
 {
 	AddFunction(PacketIdentifier::Useless, ServerAPIGeneral::Useless);
+	AddFunction(PacketIdentifier::Useless1, ServerAPIGeneral::Useless1);
 }
 
 void Server::ReadThread()
