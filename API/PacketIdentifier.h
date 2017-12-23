@@ -47,4 +47,22 @@ enum PacketIdentifier
 	SAMP_Chat_Toggle,
 	SAMP_Chat_Clear,
 	SAMP_Chat_IsOpen,
+
+	// SAMP Dialog
+	SAMP_Dialog_GetText,
+	SAMP_Dialog_SetText,
+	SAMP_Dialog_SetCursorPosition1,
+	SAMP_Dialog_SetCursorPosition2,
+	SAMP_Dialog_GetId,
+	SAMP_Dialog_GetStringCount,
+	SAMP_Dialog_GetStringByIndex,
+	SAMP_Dialog_Clear,
+	SAMP_Dialog_Close,
+	SAMP_Dialog_SelectIndex,
+	SAMP_Dialog_IsOpen,
+	SAMP_Dialog_BlockGetCaption,
+	SAMP_Dialog_BlockGetText,
+	SAMP_Dialog_Block,
+	SAMP_Dialog_BlockHasBlockedDialog,
+	SAMP_Dialog_BlockHasNeedBlocking
 };

@@ -91,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;API_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>D:\Projekte\CPP\API\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,9 +151,11 @@
     <ClInclude Include="API.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientMessage.h" />
+    <ClInclude Include="DialogManager.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="NativePlayer.h" />
     <ClInclude Include="NativeSAMPChat.h" />
+    <ClInclude Include="NativeSAMPDialog.h" />
     <ClInclude Include="OverlayElement.h" />
     <ClInclude Include="OverlayManager.h" />
     <ClInclude Include="OverlayText.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="ServerAPIOverlayText.h" />
     <ClInclude Include="ServerAPIPlayer.h" />
     <ClInclude Include="ServerAPISAMPChat.h" />
+    <ClInclude Include="ServerAPISAMPDialog.h" />
     <ClInclude Include="SharedFont.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -175,10 +179,12 @@
     <ClCompile Include="API.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientMessage.cpp" />
+    <ClCompile Include="DialogManager.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="NativePlayer.cpp" />
     <ClCompile Include="NativeSAMPChat.cpp" />
+    <ClCompile Include="NativeSAMPDialog.cpp" />
     <ClCompile Include="OverlayElement.cpp" />
     <ClCompile Include="OverlayManager.cpp" />
     <ClCompile Include="OverlayText.cpp" />
@@ -192,6 +198,7 @@
     <ClCompile Include="ServerAPIOverlayText.cpp" />
     <ClCompile Include="ServerAPIPlayer.cpp" />
     <ClCompile Include="ServerAPISAMPChat.cpp" />
+    <ClCompile Include="ServerAPISAMPDialog.cpp" />
     <ClCompile Include="SharedFont.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

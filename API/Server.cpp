@@ -5,6 +5,7 @@
 #include "ServerAPIPlayer.h"
 #include "ServerAPIOverlayText.h"
 #include "ServerAPISAMPChat.h"
+#include "ServerAPISAMPDialog.h"
 
 #define AddFunction(identifier, func) _functions.push_back(std::make_pair<PacketIdentifier, std::function<void(SerializeableQueue&, SerializeableQueue&)>>(identifier, &func))
 
@@ -62,6 +63,24 @@ void Server::RegisterFunctions()
 	AddFunction(PacketIdentifier::SAMP_Chat_Toggle, ServerAPISAMPChat::Toggle);
 	AddFunction(PacketIdentifier::SAMP_Chat_Clear, ServerAPISAMPChat::Clear);
 	AddFunction(PacketIdentifier::SAMP_Chat_IsOpen, ServerAPISAMPChat::IsOpen);
+
+	// SAMP::Dialog
+	AddFunction(PacketIdentifier::SAMP_Dialog_GetText, ServerAPISAMPDialog::GetText);
+	AddFunction(PacketIdentifier::SAMP_Dialog_SetText, ServerAPISAMPDialog::SetText);
+	AddFunction(PacketIdentifier::SAMP_Dialog_SetCursorPosition1, ServerAPISAMPDialog::SetCursorPosition1);
+	AddFunction(PacketIdentifier::SAMP_Dialog_SetCursorPosition2, ServerAPISAMPDialog::SetCursorPosition2);
+	AddFunction(PacketIdentifier::SAMP_Dialog_GetId, ServerAPISAMPDialog::GetId);
+	AddFunction(PacketIdentifier::SAMP_Dialog_GetStringCount, ServerAPISAMPDialog::GetStringCount);
+	AddFunction(PacketIdentifier::SAMP_Dialog_GetStringByIndex, ServerAPISAMPDialog::GetStringByIndex);
+	AddFunction(PacketIdentifier::SAMP_Dialog_Clear, ServerAPISAMPDialog::Clear);
+	AddFunction(PacketIdentifier::SAMP_Dialog_Close, ServerAPISAMPDialog::Close);
+	AddFunction(PacketIdentifier::SAMP_Dialog_SelectIndex, ServerAPISAMPDialog::SelectIndex);
+	AddFunction(PacketIdentifier::SAMP_Dialog_IsOpen, ServerAPISAMPDialog::IsOpen);
+	AddFunction(PacketIdentifier::SAMP_Dialog_BlockGetCaption, ServerAPISAMPDialog::BlockGetCaption);
+	AddFunction(PacketIdentifier::SAMP_Dialog_BlockGetText, ServerAPISAMPDialog::BlockGetText);
+	AddFunction(PacketIdentifier::SAMP_Dialog_Block, ServerAPISAMPDialog::Block);
+	AddFunction(PacketIdentifier::SAMP_Dialog_BlockHasBlockedDialog, ServerAPISAMPDialog::BlockHasBlockedDialog);
+	AddFunction(PacketIdentifier::SAMP_Dialog_BlockHasNeedBlocking, ServerAPISAMPDialog::BlockHasNeedBlocking);
 }
 
 void Server::ReadThread()
@@ -95,7 +114,7 @@ void Server::ReadThread()
 		auto out = SerializeableQueue();
 
 		int id = in.ReadInteger();
-		PacketTypeIdentifier identifier = (PacketTypeIdentifier)in.ReadInteger();
+		PacketIdentifier identifier = (PacketIdentifier)in.ReadInteger();
 
 		out.WriteInteger(id);
 

@@ -48,13 +48,16 @@ std::shared_ptr<ClientMessage> Client::CreateMessage(PacketIdentifier identifier
 void Client::Write(std::shared_ptr<ClientMessage> message)
 {
 	int id = -1;
-	for (size_t i = 0; i < ARRAYSIZE(_events); i++)
 	{
-		if (!_used[i])
+		std::lock_guard<std::mutex> guard(_idMutex);
+		for (size_t i = 0; i < ARRAYSIZE(_events); i++)
 		{
-			_used[i] = true;
-			id = i;
-			break;
+			if (!_used[i])
+			{
+				_used[i] = true;
+				id = i;
+				break;
+			}
 		}
 	}
 

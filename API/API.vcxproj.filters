@@ -84,6 +84,15 @@
     <ClInclude Include="ServerAPISAMPChat.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="NativeSAMPDialog.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerAPISAMPDialog.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +162,15 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="ServerAPISAMPChat.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="NativeSAMPDialog.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerAPISAMPDialog.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

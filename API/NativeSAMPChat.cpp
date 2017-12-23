@@ -2,8 +2,12 @@
 #include "NativeSAMPChat.h"
 #include "Utils.h"
 
+#include "DialogManager.h"
+
 void NativeSAMPChat::Send(const std::wstring & text)
 {
+	DialogManager::GetInstance();
+
 	typedef int(__stdcall *SendCommand)(const char*);
 	typedef int(__stdcall *SendText)(const char*);
 	static SendCommand sendCommand = (SendCommand)(Utils::GetSAMP() + 0x65C60);
@@ -47,8 +51,7 @@ std::wstring NativeSAMPChat::GetText()
 		return std::wstring();
 
 	DWORD textPointer = *(DWORD*)(inputField + 0x4D);
-
-	return std::wstring((const wchar_t *)textPointer, allocatedLength);
+	return std::wstring((const wchar_t *)textPointer, wcsnlen_s((const wchar_t*)textPointer, allocatedLength));
 }
 
 void NativeSAMPChat::SetText(const std::wstring & text)
@@ -62,7 +65,7 @@ void NativeSAMPChat::SetText(const std::wstring & text)
 		return;
 
 	DWORD textPointer = inputField + 0x4D;
-	if (*(DWORD*)textPointer)
+	if (!*(DWORD*)textPointer)
 		return;
 
 	Clear();
@@ -75,13 +78,28 @@ void NativeSAMPChat::SetText(const std::wstring & text)
 
 std::wstring NativeSAMPChat::GetBufferMessage(int index)
 {
-	// TODO
-	return std::wstring();
+	static DWORD chatBox = *(DWORD*)(Utils::GetSAMP() + 0x21A0E8);
+
+	DWORD message = chatBox + 0x1565 + (0x81 * index);
+	return Utils::FromMultiByte(std::string((const char*)message));
 }
 
 void NativeSAMPChat::AddBufferMessage(const std::wstring & text)
 {
-	// TODO
+	typedef int(__thiscall *AddBufferMessage)(DWORD, DWORD);
+	typedef int(__thiscall *DecrementBufferIndex)(DWORD);
+	static AddBufferMessage addBufferMessage = (AddBufferMessage)(Utils::GetSAMP() + 0x65930);
+	static DecrementBufferIndex decrementBufferIndex = (DecrementBufferIndex)(Utils::GetSAMP() + 0x65A00);
+	static DWORD chatBox = *(DWORD*)(Utils::GetSAMP() + 0x21A0E8);
+
+	if (text.length() > 128)
+		return;
+
+	auto s = Utils::ToMultiByte(text);
+	addBufferMessage(chatBox, (DWORD)s.c_str());
+
+	for (int i = *(int*)(chatBox + 0x1AF0); i >= 0; i--)
+		decrementBufferIndex(chatBox);
 }
 
 void NativeSAMPChat::SetCursorPosition(int index)

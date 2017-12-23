@@ -399,7 +399,7 @@ HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool sc
 			// We need to draw the text everytime, because the texture changed
 			// Unlock, render, and relock the vertex buffer
 
-			if (trianglesCount >= MAX_NUM_VERTICES - 6)
+			if (trianglesCount * 3 >= MAX_NUM_VERTICES - 6)
 			{
 				m_pVB->Unlock();
 

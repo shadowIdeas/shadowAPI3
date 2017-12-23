@@ -30,6 +30,8 @@ namespace Example
             TextAPI.Instance.SetActive(textID, true);
             TextAPI.Instance.SetText(textID, "Hello");
 
+            d.Block(42, "Test");
+
             while (true)
             {
                 Console.Clear();

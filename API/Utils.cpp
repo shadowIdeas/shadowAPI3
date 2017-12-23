@@ -4,20 +4,47 @@
 DWORD Utils::DetourNaked(DWORD originalAddress, DWORD newAddress, int length)
 {
 	DWORD oldProtection;
-
 	VirtualProtect((void*)originalAddress, length, PAGE_EXECUTE_READWRITE, &oldProtection);
 
 	for (size_t i = 0; i < length; i++)
 		*(BYTE*)(originalAddress + i) = 0x90;
 
 	DWORD relativeJumpAddress = (newAddress - originalAddress) - 5;
-
 	*(BYTE*)(originalAddress + 0) = 0xE9;
 	*(DWORD*)(originalAddress + 1) = relativeJumpAddress;
 
 	VirtualProtect((void*)originalAddress, length, oldProtection, 0);
 
 	return originalAddress + length;
+}
+
+DWORD Utils::Detour(DWORD originalAddress, DWORD newAddress, int length)
+{
+	void *memory = VirtualAlloc(0, length + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+
+	if (!memory)
+		return 0;
+
+	DWORD oldProtection;
+	VirtualProtect((void*)originalAddress, length, PAGE_EXECUTE_READWRITE, &oldProtection);
+
+	for (size_t i = 0; i < length; i++)
+	{
+		*(BYTE*)((DWORD)memory + i) = *(BYTE*)(originalAddress + i);
+		*(BYTE*)(originalAddress + i) = 0x90;
+	}
+
+	DWORD relativeJumpAddressToNew = (newAddress - originalAddress) - 5;
+	*(BYTE*)(originalAddress + 0) = 0xE9;
+	*(DWORD*)(originalAddress + 1) = relativeJumpAddressToNew;
+
+	VirtualProtect((void*)originalAddress, length, oldProtection, 0);
+
+	DWORD relativeJumpAddressToOld = (originalAddress - (DWORD)memory) - 5;
+	*(BYTE*)((DWORD)memory + length + 0) = 0xE9;
+	*(DWORD*)((DWORD)memory + length + 1) = relativeJumpAddressToOld;
+
+	return (DWORD)memory;
 }
 
 std::string Utils::ToMultiByte(const std::wstring & wide)

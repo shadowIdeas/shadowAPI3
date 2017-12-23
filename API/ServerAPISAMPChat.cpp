@@ -51,7 +51,9 @@ void ServerAPISAMPChat::SetCursorPosition(SerializeableQueue & in, Serializeable
 
 void ServerAPISAMPChat::SetCursorPosition2(SerializeableQueue & in, SerializeableQueue & out)
 {
-	NativeSAMPChat::SetCursorPosition(in.ReadInteger(), in.ReadInteger());
+	int indexStart = in.ReadInteger();
+	int indexEnd = in.ReadInteger();
+	NativeSAMPChat::SetCursorPosition(indexStart, indexEnd);
 }
 
 void ServerAPISAMPChat::Toggle(SerializeableQueue & in, SerializeableQueue & out)
