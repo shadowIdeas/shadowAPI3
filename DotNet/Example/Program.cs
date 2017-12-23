@@ -1,5 +1,6 @@
 ﻿using SAPI;
 using SAPI.Overlay;
+using System;
 using System.Threading;
 
 namespace Example
@@ -30,7 +31,11 @@ namespace Example
             TextAPI.Instance.SetText(textID, "Hello");
 
             while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Health: {p.GetHealth()}\tArmor: {p.GetArmor()}");
                 Thread.Sleep(500);
+            }
 
             // SAMP is closed
             // GeneralAPI.Instance.ResetInitialize();

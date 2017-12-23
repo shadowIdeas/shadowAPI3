@@ -13,6 +13,15 @@ public:
 
 	std::shared_ptr<ClientMessage> CreateMessage(PacketIdentifier identifier);
 	void Write(std::shared_ptr<ClientMessage> message);
+
+	int FastReadInteger(PacketIdentifier identifier);
+	float FastReadFloat(PacketIdentifier identifier);
+	bool FastReadBoolean(PacketIdentifier identifier);
+	std::wstring FastReadString(PacketIdentifier identifier);
+	void FastWriteVoid(PacketIdentifier identifier);
+	void FastWriteInteger(PacketIdentifier identifier, int i);
+	void FastWriteBoolean(PacketIdentifier identifier, bool b);
+	void FastWriteString(PacketIdentifier identifier, const std::wstring &s);
 private:
 	HANDLE _readPipe;
 	HANDLE _writePipe;

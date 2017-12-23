@@ -2,6 +2,9 @@
 #include "Server.h"
 #include "SerializeableQueue.h"
 #include "ServerAPIGeneral.h"
+#include "ServerAPIPlayer.h"
+#include "ServerAPIOverlayText.h"
+#include "ServerAPISAMPChat.h"
 
 #define AddFunction(identifier, func) _functions.push_back(std::make_pair<PacketIdentifier, std::function<void(SerializeableQueue&, SerializeableQueue&)>>(identifier, &func))
 
@@ -23,6 +26,42 @@ void Server::RegisterFunctions()
 {
 	AddFunction(PacketIdentifier::Useless, ServerAPIGeneral::Useless);
 	AddFunction(PacketIdentifier::Useless1, ServerAPIGeneral::Useless1);
+
+	// Player
+	AddFunction(PacketIdentifier::Player_GetHealth, ServerAPIPlayer::GetHealth);
+	AddFunction(PacketIdentifier::Player_GetArmor, ServerAPIPlayer::GetArmor);
+	AddFunction(PacketIdentifier::Player_GetYaw, ServerAPIPlayer::GetYaw);
+	AddFunction(PacketIdentifier::Player_GetX, ServerAPIPlayer::GetX);
+	AddFunction(PacketIdentifier::Player_GetY, ServerAPIPlayer::GetY);
+	AddFunction(PacketIdentifier::Player_GetZ, ServerAPIPlayer::GetZ);
+	AddFunction(PacketIdentifier::Player_GetPosition, ServerAPIPlayer::GetPosition);
+	AddFunction(PacketIdentifier::Player_InInterior, ServerAPIPlayer::InInterior);
+	AddFunction(PacketIdentifier::Player_InVehicle, ServerAPIPlayer::InVehicle);
+	AddFunction(PacketIdentifier::Player_IsDriver, ServerAPIPlayer::IsDriver);
+
+	// Overlay::Text
+	AddFunction(PacketIdentifier::Overlay_Text_Create, ServerAPIOverlayText::Create);
+	AddFunction(PacketIdentifier::Overlay_Text_Delete, ServerAPIOverlayText::Delete);
+	AddFunction(PacketIdentifier::Overlay_Text_SetColor, ServerAPIOverlayText::SetColor);
+	AddFunction(PacketIdentifier::Overlay_Text_SetX, ServerAPIOverlayText::SetX);
+	AddFunction(PacketIdentifier::Overlay_Text_SetY, ServerAPIOverlayText::SetY);
+	AddFunction(PacketIdentifier::Overlay_Text_SetText, ServerAPIOverlayText::SetText);
+	AddFunction(PacketIdentifier::Overlay_Text_SetSize, ServerAPIOverlayText::SetSize);
+	AddFunction(PacketIdentifier::Overlay_Text_GetTextExtent, ServerAPIOverlayText::GetExtent);
+
+	// SAMP::Chat
+	AddFunction(PacketIdentifier::SAMP_Chat_Send, ServerAPISAMPChat::Send);
+	AddFunction(PacketIdentifier::SAMP_Chat_AddMessage1, ServerAPISAMPChat::AddMessage1);
+	AddFunction(PacketIdentifier::SAMP_Chat_AddMessage2, ServerAPISAMPChat::AddMessage2);
+	AddFunction(PacketIdentifier::SAMP_Chat_GetText, ServerAPISAMPChat::GetText);
+	AddFunction(PacketIdentifier::SAMP_Chat_SetText, ServerAPISAMPChat::SetText);
+	AddFunction(PacketIdentifier::SAMP_Chat_GetBufferMessage, ServerAPISAMPChat::GetBufferMessage);
+	AddFunction(PacketIdentifier::SAMP_Chat_AddBufferMessage, ServerAPISAMPChat::AddBufferMessage);
+	AddFunction(PacketIdentifier::SAMP_Chat_SetCursorPosition1, ServerAPISAMPChat::SetCursorPosition);
+	AddFunction(PacketIdentifier::SAMP_Chat_SetCursorPosition2, ServerAPISAMPChat::SetCursorPosition2);
+	AddFunction(PacketIdentifier::SAMP_Chat_Toggle, ServerAPISAMPChat::Toggle);
+	AddFunction(PacketIdentifier::SAMP_Chat_Clear, ServerAPISAMPChat::Clear);
+	AddFunction(PacketIdentifier::SAMP_Chat_IsOpen, ServerAPISAMPChat::IsOpen);
 }
 
 void Server::ReadThread()

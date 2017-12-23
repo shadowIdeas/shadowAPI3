@@ -151,6 +151,11 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientMessage.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="NativePlayer.h" />
+    <ClInclude Include="NativeSAMPChat.h" />
+    <ClInclude Include="OverlayElement.h" />
+    <ClInclude Include="OverlayManager.h" />
+    <ClInclude Include="OverlayText.h" />
     <ClInclude Include="PacketData.h" />
     <ClInclude Include="PacketIdentifier.h" />
     <ClInclude Include="PacketTypeData.h" />
@@ -158,9 +163,13 @@
     <ClInclude Include="SerializeableQueue.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="ServerAPIGeneral.h" />
+    <ClInclude Include="ServerAPIOverlayText.h" />
+    <ClInclude Include="ServerAPIPlayer.h" />
+    <ClInclude Include="ServerAPISAMPChat.h" />
     <ClInclude Include="SharedFont.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
@@ -168,6 +177,11 @@
     <ClCompile Include="ClientMessage.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="NativePlayer.cpp" />
+    <ClCompile Include="NativeSAMPChat.cpp" />
+    <ClCompile Include="OverlayElement.cpp" />
+    <ClCompile Include="OverlayManager.cpp" />
+    <ClCompile Include="OverlayText.cpp" />
     <ClCompile Include="PacketData.cpp" />
     <ClCompile Include="PacketIdentifier.cpp" />
     <ClCompile Include="PacketTypeData.cpp" />
@@ -175,6 +189,9 @@
     <ClCompile Include="SerializeableQueue.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerAPIGeneral.cpp" />
+    <ClCompile Include="ServerAPIOverlayText.cpp" />
+    <ClCompile Include="ServerAPIPlayer.cpp" />
+    <ClCompile Include="ServerAPISAMPChat.cpp" />
     <ClCompile Include="SharedFont.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -182,6 +199,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

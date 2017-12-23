@@ -82,6 +82,61 @@ void Client::Write(std::shared_ptr<ClientMessage> message)
 	_used[id] = false;
 }
 
+int Client::FastReadInteger(PacketIdentifier identifier)
+{
+	auto message = CreateMessage(identifier);
+	Write(message);
+	return message->GetResponse()->ReadInteger();
+}
+
+float Client::FastReadFloat(PacketIdentifier identifier)
+{
+	auto message = CreateMessage(identifier);
+	Write(message);
+	return message->GetResponse()->ReadFloat();
+}
+
+bool Client::FastReadBoolean(PacketIdentifier identifier)
+{
+	auto message = CreateMessage(identifier);
+	Write(message);
+	return message->GetResponse()->ReadBoolean();
+}
+
+std::wstring Client::FastReadString(PacketIdentifier identifier)
+{
+	auto message = CreateMessage(identifier);
+	Write(message);
+	return message->GetResponse()->ReadString();
+}
+
+void Client::FastWriteVoid(PacketIdentifier identifier)
+{
+	auto message = CreateMessage(identifier);
+	Write(message);
+}
+
+void Client::FastWriteInteger(PacketIdentifier identifier, int i)
+{
+	auto message = CreateMessage(identifier);
+	message->GetInput().WriteInteger(i);
+	Write(message);
+}
+
+void Client::FastWriteBoolean(PacketIdentifier identifier, bool b)
+{
+	auto message = CreateMessage(identifier);
+	message->GetInput().WriteBoolean(b);
+	Write(message);
+}
+
+void Client::FastWriteString(PacketIdentifier identifier, const std::wstring & s)
+{
+	auto message = CreateMessage(identifier);
+	message->GetInput().WriteString(s);
+	Write(message);
+}
+
 void Client::ReadThread()
 {
 	while (_running)

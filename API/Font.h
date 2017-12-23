@@ -46,8 +46,10 @@ class Font
 	std::shared_ptr<SharedFont> m_font;
 	DWORD m_dwFlags;
 public:
+	void DrawTextProxy(float x, float y, float offsetY);
+
 	// 2D and 3D text drawing functions
-	HRESULT DrawText(FLOAT x, FLOAT y, DWORD dwColor, const WCHAR* strText, DWORD dwFlags = 0L);
+	HRESULT DrawText(float x, float y, DWORD color, const WCHAR* text, bool scissor = false, RECT scissorRect = {}, DWORD flags = 0L);
 
 	// Function to get extent of text
 	HRESULT GetTextExtent(const WCHAR* strText, SIZE* pSize);

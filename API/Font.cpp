@@ -279,10 +279,9 @@ HRESULT Font::GetTextExtent(const WCHAR* strText, SIZE* pSize)
 	return S_OK;
 }
 
-HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
-	const WCHAR* strText, DWORD dwFlags)
+HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool scissor, RECT scissorRect, DWORD flags)
 {
-	if (m_pd3dDevice == NULL || strText == NULL || m_font == nullptr)
+	if (m_pd3dDevice == 0 || text == 0 || m_font == nullptr)
 		return E_FAIL;
 
 	// Setup renderstate
@@ -292,7 +291,13 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 	m_pd3dDevice->SetPixelShader(NULL);
 	m_pd3dDevice->SetStreamSource(0, m_pVB, 0, sizeof(FONT2DVERTEX));
 
-	if (dwFlags & D3DFONT_FILTERED)
+	if (scissor)
+	{
+		m_pd3dDevice->SetScissorRect(&scissorRect);
+		m_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, TRUE);
+	}
+
+	if (flags & D3DFONT_FILTERED)
 	{
 		m_pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 		m_pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
@@ -300,21 +305,21 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 
 	// Adjust for character spacing
 	auto spaceSize = m_font->GetCharacterSize(m_pd3dDevice, L' ');
-	float startX = sx;
+	float startX = x;
 
 	// Fill vertex buffer
 	FONT2DVERTEX* vertices = NULL;
 	int trianglesCount = 0;
 	m_pVB->Lock(0, 0, (void**)&vertices, D3DLOCK_DISCARD);
 
-	auto stringLength = lstrlenW(strText);
-	DWORD customColor = dwColor;
+	auto stringLength = lstrlenW(text);
+	DWORD customColor = color;
 
 	auto textures = std::vector<LPDIRECT3DTEXTURE9>();
 
 	for (int i = 0; i < stringLength; i++)
 	{
-		wchar_t c = strText[i];
+		wchar_t c = text[i];
 
 		if (c == L'{')
 		{
@@ -323,7 +328,7 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 			std::wstring numericString = L"";
 			for (int j = i + 1; j < stringLength; j++)
 			{
-				wchar_t ch = strText[j];
+				wchar_t ch = text[j];
 				ch = towupper(ch);
 
 				if (ch == '}')
@@ -352,7 +357,7 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 			if (endIndex > 0 && valid)
 			{
 				swscanf_s(numericString.data(), L"%X", &customColor);
-				customColor |= (dwColor >> 24) << 24;
+				customColor |= (color >> 24) << 24;
 				i = endIndex;
 				continue;
 			}
@@ -360,8 +365,8 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 
 		if (c == '\n')
 		{
-			sx = startX;
-			sy += spaceSize.cy;
+			x = startX;
+			y += spaceSize.cy;
 			continue;
 		}
 
@@ -379,13 +384,13 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 
 		if (c != L' ')
 		{
-			if (dwFlags & D3DFONT_COLORTABLE)
-				dwColor = customColor;
+			if (flags & D3DFONT_COLORTABLE)
+				color = customColor;
 
-			*vertices++ = InitFont2DVertex(D3DXVECTOR4(sx - 0.5f, sy - 0.5f, 0.9f, 1.0f), dwColor, 0, 0);
-			*vertices++ = InitFont2DVertex(D3DXVECTOR4(sx - 0.5f + w, sy - 0.5f, 0.9f, 1.0f), dwColor, 1.0, 0.0);
-			*vertices++ = InitFont2DVertex(D3DXVECTOR4(sx - 0.5f + w, sy - 0.5f + h, 0.9f, 1.0f), dwColor, 1.0, 1.0);
-			*vertices++ = InitFont2DVertex(D3DXVECTOR4(sx - 0.5f, sy - 0.5f + h, 0.9f, 1.0f), dwColor, 0.0, 1.0);
+			*vertices++ = InitFont2DVertex(D3DXVECTOR4(x - 0.5f, y - 0.5f, 0.9f, 1.0f), color, 0, 0);
+			*vertices++ = InitFont2DVertex(D3DXVECTOR4(x - 0.5f + w, y - 0.5f, 0.9f, 1.0f), color, 1.0, 0.0);
+			*vertices++ = InitFont2DVertex(D3DXVECTOR4(x - 0.5f + w, y - 0.5f + h, 0.9f, 1.0f), color, 1.0, 1.0);
+			*vertices++ = InitFont2DVertex(D3DXVECTOR4(x - 0.5f, y - 0.5f + h, 0.9f, 1.0f), color, 0.0, 1.0);
 			trianglesCount += 2;
 
 			// Push texture
@@ -413,7 +418,7 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 			}
 		}
 
-		sx += w;
+		x += w;
 	}
 
 	// Unlock and render the vertex buffer
@@ -427,6 +432,9 @@ HRESULT Font::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor,
 			m_pd3dDevice->SetTexture(0, NULL);
 		}
 	}
+
+	if (scissor)
+		m_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
 
 	// Restore the modified renderstates
 	m_pStateBlockSaved->Apply();
