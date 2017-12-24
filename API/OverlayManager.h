@@ -19,6 +19,7 @@ public:
 	std::shared_ptr<T> GetElementById(int id);
 
 	void RemoveElement(int id);
+	void Cleanup();
 private:
 	std::mutex _elementMutex;
 	int _idCounter;

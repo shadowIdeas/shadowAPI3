@@ -153,9 +153,13 @@
     <ClInclude Include="ClientMessage.h" />
     <ClInclude Include="DialogManager.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="NativeSAMPPlayer.h" />
     <ClInclude Include="NativePlayer.h" />
     <ClInclude Include="NativeSAMPChat.h" />
     <ClInclude Include="NativeSAMPDialog.h" />
+    <ClInclude Include="NativeSAMPVehicle.h" />
+    <ClInclude Include="NativeVehicle.h" />
+    <ClInclude Include="OverlayBox.h" />
     <ClInclude Include="OverlayElement.h" />
     <ClInclude Include="OverlayManager.h" />
     <ClInclude Include="OverlayText.h" />
@@ -166,14 +170,19 @@
     <ClInclude Include="SerializeableQueue.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="ServerAPIGeneral.h" />
+    <ClInclude Include="ServerAPIOverlayBox.h" />
     <ClInclude Include="ServerAPIOverlayText.h" />
     <ClInclude Include="ServerAPIPlayer.h" />
     <ClInclude Include="ServerAPISAMPChat.h" />
     <ClInclude Include="ServerAPISAMPDialog.h" />
+    <ClInclude Include="ServerAPISAMPPlayer.h" />
+    <ClInclude Include="ServerAPISAMPVehicle.h" />
+    <ClInclude Include="ServerAPIVehicle.h" />
     <ClInclude Include="SharedFont.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="ZoneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
@@ -182,9 +191,13 @@
     <ClCompile Include="DialogManager.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="NativeSAMPPlayer.cpp" />
     <ClCompile Include="NativePlayer.cpp" />
     <ClCompile Include="NativeSAMPChat.cpp" />
     <ClCompile Include="NativeSAMPDialog.cpp" />
+    <ClCompile Include="NativeSAMPVehicle.cpp" />
+    <ClCompile Include="NativeVehicle.cpp" />
+    <ClCompile Include="OverlayBox.cpp" />
     <ClCompile Include="OverlayElement.cpp" />
     <ClCompile Include="OverlayManager.cpp" />
     <ClCompile Include="OverlayText.cpp" />
@@ -195,10 +208,14 @@
     <ClCompile Include="SerializeableQueue.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerAPIGeneral.cpp" />
+    <ClCompile Include="ServerAPIOverlayBox.cpp" />
     <ClCompile Include="ServerAPIOverlayText.cpp" />
     <ClCompile Include="ServerAPIPlayer.cpp" />
     <ClCompile Include="ServerAPISAMPChat.cpp" />
     <ClCompile Include="ServerAPISAMPDialog.cpp" />
+    <ClCompile Include="ServerAPISAMPPlayer.cpp" />
+    <ClCompile Include="ServerAPISAMPVehicle.cpp" />
+    <ClCompile Include="ServerAPIVehicle.cpp" />
     <ClCompile Include="SharedFont.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -207,6 +224,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ZoneManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

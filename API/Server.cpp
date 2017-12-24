@@ -1,9 +1,14 @@
 #include "stdafx.h"
 #include "Server.h"
+#include "OverlayManager.h"
 #include "SerializeableQueue.h"
 #include "ServerAPIGeneral.h"
 #include "ServerAPIPlayer.h"
+#include "ServerAPIVehicle.h"
 #include "ServerAPIOverlayText.h"
+#include "ServerAPIOverlayBox.h"
+#include "ServerAPISAMPPlayer.h"
+#include "ServerAPISAMPVehicle.h"
 #include "ServerAPISAMPChat.h"
 #include "ServerAPISAMPDialog.h"
 
@@ -40,15 +45,51 @@ void Server::RegisterFunctions()
 	AddFunction(PacketIdentifier::Player_InVehicle, ServerAPIPlayer::InVehicle);
 	AddFunction(PacketIdentifier::Player_IsDriver, ServerAPIPlayer::IsDriver);
 
+	// Vehicle
+	AddFunction(PacketIdentifier::Vehicle_GetSpeed, ServerAPIVehicle::GetSpeed);
+	AddFunction(PacketIdentifier::Vehicle_GetHealth, ServerAPIVehicle::GetHealth);
+	AddFunction(PacketIdentifier::Vehicle_GetModelId, ServerAPIVehicle::GetModelId);
+	AddFunction(PacketIdentifier::Vehicle_IsLightActive, ServerAPIVehicle::IsLightActive);
+	AddFunction(PacketIdentifier::Vehicle_IsLocked, ServerAPIVehicle::IsLocked);
+	AddFunction(PacketIdentifier::Vehicle_IsEngineRunning, ServerAPIVehicle::IsEngineRunning);
+	AddFunction(PacketIdentifier::Vehicle_UseHorn, ServerAPIVehicle::UseHorn);
+	AddFunction(PacketIdentifier::Vehicle_UseSiren, ServerAPIVehicle::UseSiren);
+
 	// Overlay::Text
 	AddFunction(PacketIdentifier::Overlay_Text_Create, ServerAPIOverlayText::Create);
 	AddFunction(PacketIdentifier::Overlay_Text_Delete, ServerAPIOverlayText::Delete);
 	AddFunction(PacketIdentifier::Overlay_Text_SetColor, ServerAPIOverlayText::SetColor);
 	AddFunction(PacketIdentifier::Overlay_Text_SetX, ServerAPIOverlayText::SetX);
 	AddFunction(PacketIdentifier::Overlay_Text_SetY, ServerAPIOverlayText::SetY);
+	AddFunction(PacketIdentifier::Overlay_Text_SetMaxWidth, ServerAPIOverlayText::SetMaxWidth);
+	AddFunction(PacketIdentifier::Overlay_Text_SetMaxHeight, ServerAPIOverlayText::SetMaxHeight);
+	AddFunction(PacketIdentifier::Overlay_Text_SetActive, ServerAPIOverlayText::SetActive);
 	AddFunction(PacketIdentifier::Overlay_Text_SetText, ServerAPIOverlayText::SetText);
 	AddFunction(PacketIdentifier::Overlay_Text_SetSize, ServerAPIOverlayText::SetSize);
+	AddFunction(PacketIdentifier::Overlay_Text_SetUseMaxWidth, ServerAPIOverlayText::SetUseMaxWidth);
+	AddFunction(PacketIdentifier::Overlay_Text_SetUseMaxHeight, ServerAPIOverlayText::SetUseMaxHeight);
 	AddFunction(PacketIdentifier::Overlay_Text_GetTextExtent, ServerAPIOverlayText::GetExtent);
+
+	// Overlay::Box
+	AddFunction(PacketIdentifier::Overlay_Box_Create, ServerAPIOverlayBox::Create);
+	AddFunction(PacketIdentifier::Overlay_Box_Delete, ServerAPIOverlayBox::Delete);
+	AddFunction(PacketIdentifier::Overlay_Box_SetColor, ServerAPIOverlayBox::SetColor);
+	AddFunction(PacketIdentifier::Overlay_Box_SetX, ServerAPIOverlayBox::SetX);
+	AddFunction(PacketIdentifier::Overlay_Box_SetY, ServerAPIOverlayBox::SetY);
+	AddFunction(PacketIdentifier::Overlay_Box_SetWidth, ServerAPIOverlayBox::SetWidth);
+	AddFunction(PacketIdentifier::Overlay_Box_SetHeight, ServerAPIOverlayBox::SetHeight);
+	AddFunction(PacketIdentifier::Overlay_Box_SetActive, ServerAPIOverlayBox::SetActive);
+
+	// SAMP::Player
+	AddFunction(PacketIdentifier::SAMP_Player_GetLocalName, ServerAPISAMPPlayer::GetLocalName);
+	AddFunction(PacketIdentifier::SAMP_Player_GetLocalId, ServerAPISAMPPlayer::GetLocalId);
+	AddFunction(PacketIdentifier::SAMP_Player_GetNameById, ServerAPISAMPPlayer::GetNameById);
+	AddFunction(PacketIdentifier::SAMP_Player_GetIdByName, ServerAPISAMPPlayer::GetIdByName);
+	AddFunction(PacketIdentifier::SAMP_Player_GetFullName, ServerAPISAMPPlayer::GetFullName);
+
+	// SAMP::Vehicle
+	AddFunction(PacketIdentifier::SAMP_Vehicle_GetNumberplate, ServerAPISAMPVehicle::GetNumberplate);
+	AddFunction(PacketIdentifier::SAMP_Vehicle_ToggleSiren, ServerAPISAMPVehicle::ToggleSiren);
 
 	// SAMP::Chat
 	AddFunction(PacketIdentifier::SAMP_Chat_Send, ServerAPISAMPChat::Send);
@@ -138,6 +179,7 @@ void Server::ReadThread()
 
 void Server::WaitForClient()
 {
+	OverlayManager::GetInstance().Cleanup();
 	bool connected = false;
 
 	while (!connected)

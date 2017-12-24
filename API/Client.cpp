@@ -61,10 +61,21 @@ void Client::Write(std::shared_ptr<ClientMessage> message)
 		}
 	}
 
-	if (id == -1)
+	// Wait until a ID is free
+	while (id == -1)
 	{
-		// TODO
-		DebugBreak();
+		Sleep(20);
+
+		std::lock_guard<std::mutex> guard(_idMutex);
+		for (size_t i = 0; i < ARRAYSIZE(_events); i++)
+		{
+			if (!_used[i])
+			{
+				_used[i] = true;
+				id = i;
+				break;
+			}
+		}
 	}
 
 	SerializeableQueue queue;
@@ -151,8 +162,7 @@ void Client::ReadThread()
 
 		if (!success || bytesRead == 0)
 		{
-			// TODO
-			DebugBreak();
+			return;
 		}
 
 		std::vector<BYTE> bytes;

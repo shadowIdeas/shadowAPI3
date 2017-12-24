@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NativePlayer.h"
 
-#define Validation(ret) if(GetPlayer() == 0) return ret;
+#define Validation(ret) if(GetPlayer() == 0) return ret
 
 DWORD NativePlayer::GetPlayer()
 {

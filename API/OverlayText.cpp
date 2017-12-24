@@ -9,6 +9,11 @@ OverlayText::OverlayText(int id)
 	_firstDraw = true;
 	_color = 0xFFFFFFFF;
 	_size = 12;
+
+	_useMaxWidth = false;
+	_useMaxHeight = false;
+	_maxWidth = 0;
+	_maxHeight = 0;
 }
 
 OverlayText::~OverlayText()
@@ -30,10 +35,30 @@ void OverlayText::SetColor(unsigned long color)
 	_color = color;
 }
 
+void OverlayText::SetMaxWidth(int maxWidth)
+{
+	_maxWidth = maxWidth;
+}
+
+void OverlayText::SetMaxHeight(int maxHeight)
+{
+	_maxHeight = maxHeight;
+}
+
 void OverlayText::SetSize(int size)
 {
 	_size = size;
 	ResetText();
+}
+
+void OverlayText::SetUseMaxWidth(bool useMaxWidth)
+{
+	_useMaxWidth = useMaxWidth;
+}
+
+void OverlayText::SetUseMaxHeight(bool useMaxHeight)
+{
+	_useMaxHeight = useMaxHeight;
 }
 
 void OverlayText::GetTextExtent(int & width, int & height)
@@ -61,12 +86,7 @@ void OverlayText::Present(LPDIRECT3DDEVICE9 device)
 
 	if (_font)
 	{
-		_font->DrawTextW(GetX() + 1, GetY(), 0xFF000000, _text.c_str());
-		_font->DrawTextW(GetX() - 1, GetY(), 0xFF000000, _text.c_str());
-		_font->DrawTextW(GetX(), GetY() + 1, 0xFF000000, _text.c_str());
-		_font->DrawTextW(GetX(), GetY() - 1, 0xFF000000, _text.c_str());
-
-		_font->DrawTextW(GetX(), GetY(), _color, _text.c_str());
+		_font->DrawTextProxy(GetX(), GetY(), _color, _text, _useMaxWidth, _useMaxHeight, _maxWidth, _maxHeight);
 	}
 }
 

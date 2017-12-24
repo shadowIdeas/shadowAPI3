@@ -92,6 +92,8 @@ Font::Font(const std::wstring &fontName, DWORD dwHeight, DWORD dwFlags)
 
 	m_font = GetFont(fontName, dwHeight, dwFlags);
 	m_dwFlags = dwFlags;
+
+	_scrollY = 0.0f;
 }
 
 Font::~Font()
@@ -279,10 +281,165 @@ HRESULT Font::GetTextExtent(const WCHAR* strText, SIZE* pSize)
 	return S_OK;
 }
 
-HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool scissor, RECT scissorRect, DWORD flags)
+void Font::DrawTextProxy(float x, float y, DWORD color, const std::wstring & text, bool useMaxWidth, bool useMaxHeight, int maxWidth, int maxHeight)
+{
+	// Disable scissor, just draw normal
+	if (!useMaxWidth && !useMaxHeight)
+	{
+		DrawTextInternal(x + 1, y, 0xFF000000, text.c_str());
+		DrawTextInternal(x - 1, y, 0xFF000000, text.c_str());
+		DrawTextInternal(x, y + 1, 0xFF000000, text.c_str());
+		DrawTextInternal(x, y - 1, 0xFF000000, text.c_str());
+		DrawTextInternal(x, y, color, text.c_str());
+		return;
+	}
+
+	if (useMaxWidth || useMaxHeight)
+	{
+		auto extent = GetTextExtent(text, useMaxWidth, useMaxHeight, maxWidth, maxHeight);
+		if (useMaxWidth && !useMaxHeight || (useMaxHeight && extent.cy <= maxHeight))
+		{
+			DrawTextInternal(x + 1, y, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+			DrawTextInternal(x - 1, y, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+			DrawTextInternal(x, y + 1, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+			DrawTextInternal(x, y - 1, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+			DrawTextInternal(x, y, color, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+		}
+		else if (useMaxHeight)
+		{
+			RECT rect = {};
+
+			if (useMaxWidth)
+			{
+				rect.left = (int)x;
+				rect.right = (int)x + extent.cx;
+			}
+
+			rect.top = (int)y;
+			rect.bottom = (int)y + maxHeight;
+
+			auto spaceSize = m_font->GetCharacterSize(m_pd3dDevice, L' ');
+			auto padding = extent.cy + (spaceSize.cy * 2);
+
+			DrawTextInternal(x + 1, y - _scrollY, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x - 1, y - _scrollY, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y - _scrollY + 1, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y - _scrollY - 1, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y - _scrollY, color, text.c_str(), rect);
+
+			DrawTextInternal(x + 1, y + padding - _scrollY, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x - 1, y + padding - _scrollY, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y + padding - _scrollY + 1, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y + padding - _scrollY - 1, 0xFF000000, text.c_str(), rect);
+			DrawTextInternal(x, y + padding - _scrollY, color, text.c_str(), rect);
+
+			if (_scrollY >= padding)
+				_scrollY = 0.0f;
+
+			_scrollY += 0.5f;
+		}
+	}
+}
+
+SIZE Font::GetTextExtent(const std::wstring & text, bool useMaxWidth, bool useMaxHeight, int maxWidth, int maxHeight)
+{
+	SIZE size = { };
+
+	auto spaceSize = m_font->GetCharacterSize(m_pd3dDevice, L' ');
+	auto stringLength = text.length();
+
+	float rowWidth = 0.0f;
+	float rowHeight = (float)spaceSize.cy;
+	float width = 0.0f;
+	float height = rowHeight;
+
+	for (int i = 0; i < stringLength; i++)
+	{
+		wchar_t c = text[i];
+
+		if (c == L'{')
+		{
+			int endIndex = 0;
+			bool valid = true;
+			std::wstring numericString = L"";
+			for (int j = i + 1; j < stringLength; j++)
+			{
+				wchar_t ch = text[j];
+				ch = towupper(ch);
+
+				if (ch == '}')
+				{
+					endIndex = j;
+					break;
+				}
+
+				bool numeric = (ch >= L'0' && ch <= L'9') || (ch >= L'A' && ch <= L'F');
+				if (!numeric)
+				{
+					valid = false;
+					break;
+				}
+				else
+				{
+					numericString += ch;
+					if (numericString.size() > 8)
+					{
+						valid = false;
+						break;
+					}
+				}
+			}
+
+			if (endIndex > 0 && valid)
+			{
+				i = endIndex;
+				continue;
+			}
+		}
+
+		if (c == '\n')
+		{
+			rowWidth = 0.0f;
+			height += rowHeight;
+			continue;
+		}
+		if (useMaxWidth && c == L' ')
+		{
+			if (rowWidth + spaceSize.cx > maxWidth)
+			{
+				rowWidth = 0.0f;
+				height += rowHeight;
+				continue;
+			}
+		}
+
+		if (c < 0 || c > USHRT_MAX)
+			continue;
+
+		auto characterTexture = m_font->GetCharacterTexture(m_pd3dDevice, c);
+		auto characterSize = m_font->GetCharacterSize(m_pd3dDevice, c);
+
+		rowWidth += characterSize.cx;
+
+		if (rowWidth > width)
+			width = rowWidth;
+	}
+
+	size.cx = (int)width;
+	size.cy = (int)height;
+	return size;
+}
+
+HRESULT Font::DrawTextInternal(float x, float y, DWORD color, const WCHAR* text, RECT scissorRect, DWORD flags)
 {
 	if (m_pd3dDevice == 0 || text == 0 || m_font == nullptr)
 		return E_FAIL;
+
+	int maxWidth = scissorRect.right - scissorRect.left;
+	int maxHeight = scissorRect.bottom - scissorRect.top;
+
+	bool useMaxWidth = maxWidth != 0;
+	bool useMaxHeight = maxHeight != 0;
 
 	// Setup renderstate
 	m_pStateBlockSaved->Capture();
@@ -291,7 +448,7 @@ HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool sc
 	m_pd3dDevice->SetPixelShader(NULL);
 	m_pd3dDevice->SetStreamSource(0, m_pVB, 0, sizeof(FONT2DVERTEX));
 
-	if (scissor)
+	if (useMaxHeight)
 	{
 		m_pd3dDevice->SetScissorRect(&scissorRect);
 		m_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, TRUE);
@@ -369,7 +526,15 @@ HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool sc
 			y += spaceSize.cy;
 			continue;
 		}
-
+		if (useMaxWidth && c == L' ')
+		{
+			if ((x - startX) + spaceSize.cx > maxWidth)
+			{
+				x = startX;
+				y += spaceSize.cy;
+				continue;
+			}
+		}
 		if (c < 0 || c > USHRT_MAX)
 			continue;
 
@@ -433,7 +598,7 @@ HRESULT Font::DrawText(float x, float y, DWORD color, const WCHAR* text, bool sc
 		}
 	}
 
-	if (scissor)
+	if (useMaxHeight)
 		m_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
 
 	// Restore the modified renderstates

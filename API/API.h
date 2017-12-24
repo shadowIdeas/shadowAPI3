@@ -103,8 +103,6 @@ namespace API
 			DllPublic void SetColor(int id, unsigned long color);
 			DllPublic void SetX(int id, int x);
 			DllPublic void SetY(int id, int y);
-			DllPublic void SetWidth(int id, int width);
-			DllPublic void SetHeight(int id, int height);
 			DllPublic void SetMaxWidth(int id, int maxWidth);
 			DllPublic void SetMaxHeight(int id, int maxHeight);
 

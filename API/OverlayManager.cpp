@@ -73,6 +73,12 @@ void OverlayManager::RemoveElement(int id)
 	}
 }
 
+void OverlayManager::Cleanup()
+{
+	std::lock_guard<std::mutex> guard(_elementMutex);
+	_elements.clear();
+}
+
 void OverlayManager::PresentProxy()
 {
 	std::lock_guard<std::mutex> guard(_elementMutex);
@@ -81,7 +87,7 @@ void OverlayManager::PresentProxy()
 	for (size_t i = 0; i < _elements.size(); i++)
 	{
 		auto element = _elements[i];
-		if (element)
+		if (element && element->GetActive())
 			element->Present(device);
 	}
 }

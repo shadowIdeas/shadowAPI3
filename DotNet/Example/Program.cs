@@ -28,7 +28,13 @@ namespace Example
 
             var textID = TextAPI.Instance.Create();
             TextAPI.Instance.SetActive(textID, true);
-            TextAPI.Instance.SetText(textID, "Hello");
+            TextAPI.Instance.SetText(textID, "Mobiler Daten Computer\nName: Kayne.Walter\nWantedanzahl: 13\nGrund: Flucht(-versuch) 18:21\n(Von Kayne.Walter)\nF[334s} M[100s] A[82s]");
+            TextAPI.Instance.SetUseMaxWidth(textID, true);
+            TextAPI.Instance.SetUseMaxHeight(textID, true);
+            TextAPI.Instance.SetX(textID, 500);
+            TextAPI.Instance.SetY(textID, 300);
+            TextAPI.Instance.SetMaxWidth(textID, 300);
+            TextAPI.Instance.SetMaxHeight(textID, 100);
 
             d.Block(42, "Test");
 

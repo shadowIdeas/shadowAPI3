@@ -11,12 +11,15 @@ public:
 	virtual void Reset(LPDIRECT3DDEVICE9 device) = 0;
 
 	int GetId();
+	bool GetActive();
 	int GetX();
 	int GetY();
+	void SetActive(bool active);
 	void SetX(int x);
 	void SetY(int y);
 private:
 	int _id;
+	bool _active;
 	int _x;
 	int _y;
 };

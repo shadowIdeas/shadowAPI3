@@ -17,14 +17,22 @@ enum PacketIdentifier
 	Player_InVehicle,
 	Player_IsDriver,
 
+	// Vehicle
+	Vehicle_GetSpeed,
+	Vehicle_GetHealth,
+	Vehicle_GetModelId,
+	Vehicle_IsLightActive,
+	Vehicle_IsLocked,
+	Vehicle_IsEngineRunning,
+	Vehicle_UseHorn,
+	Vehicle_UseSiren,
+
 	// Overlay Text
 	Overlay_Text_Create,
 	Overlay_Text_Delete,
 	Overlay_Text_SetColor,
 	Overlay_Text_SetX,
 	Overlay_Text_SetY,
-	Overlay_Text_SetWidth,
-	Overlay_Text_SetHeight,
 	Overlay_Text_SetMaxWidth,
 	Overlay_Text_SetMaxHeight,
 	Overlay_Text_SetActive,
@@ -33,6 +41,27 @@ enum PacketIdentifier
 	Overlay_Text_SetUseMaxWidth,
 	Overlay_Text_SetUseMaxHeight,
 	Overlay_Text_GetTextExtent,
+
+	// Overlay Box
+	Overlay_Box_Create,
+	Overlay_Box_Delete,
+	Overlay_Box_SetColor,
+	Overlay_Box_SetX,
+	Overlay_Box_SetY,
+	Overlay_Box_SetWidth,
+	Overlay_Box_SetHeight,
+	Overlay_Box_SetActive,
+
+	// SAMP Player
+	SAMP_Player_GetLocalName,
+	SAMP_Player_GetLocalId,
+	SAMP_Player_GetNameById,
+	SAMP_Player_GetIdByName,
+	SAMP_Player_GetFullName,
+
+	// SAMP Vehicle
+	SAMP_Vehicle_GetNumberplate,
+	SAMP_Vehicle_ToggleSiren,
 
 	// SAMP Chat
 	SAMP_Chat_Send,
