@@ -9,11 +9,10 @@ Client::Client()
 
 	while (!WaitNamedPipe(L"\\\\.\\pipe\\EBIP1", NMPWAIT_WAIT_FOREVER))
 		Sleep(20);
-	_readPipe = CreateFile(L"\\\\.\\pipe\\EBIP1", GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+	_readPipe = CreateFile(L"\\\\.\\pipe\\EBIP1", GENERIC_READ | FILE_WRITE_ATTRIBUTES, 0, 0, OPEN_EXISTING, 0, 0);
 
 	DWORD mode = PIPE_READMODE_MESSAGE;
 	SetNamedPipeHandleState(_readPipe, &mode, 0, 0);
-	SetNamedPipeHandleState(_writePipe, &mode, 0, 0);
 
 	_freed = false;
 
@@ -197,6 +196,9 @@ void Client::ReadThread()
 
 		if (!success || bytesRead == 0)
 		{
+			if (GetLastError() == ERROR_MORE_DATA)
+				continue;
+
 			Free();
 			return;
 		}

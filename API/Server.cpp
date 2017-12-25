@@ -138,6 +138,9 @@ void Server::ReadThread()
 
 		if (!success || bytesRead == 0)
 		{
+			if (GetLastError() == ERROR_MORE_DATA)
+				continue;
+
 			if (GetLastError() == ERROR_BROKEN_PIPE)
 			{
 				DisconnectNamedPipe(_readPipe);

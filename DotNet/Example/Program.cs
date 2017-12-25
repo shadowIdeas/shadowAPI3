@@ -2,6 +2,7 @@
 using SAPI.Overlay;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Example
 {
@@ -24,24 +25,30 @@ namespace Example
 
             Thread.Sleep(500);
 
-            ChatAPI.Instance.Send("Hello");
+            //ChatAPI.Instance.Send("Hello");
 
-            var textID = TextAPI.Instance.Create();
-            TextAPI.Instance.SetActive(textID, true);
-            TextAPI.Instance.SetText(textID, "Mobiler Daten Computer\nName: Kayne.Walter\nWantedanzahl: 13\nGrund: Flucht(-versuch) 18:21\n(Von Kayne.Walter)\nF[334s} M[100s] A[82s]");
-            TextAPI.Instance.SetUseMaxWidth(textID, true);
-            TextAPI.Instance.SetUseMaxHeight(textID, true);
-            TextAPI.Instance.SetX(textID, 500);
-            TextAPI.Instance.SetY(textID, 300);
-            TextAPI.Instance.SetMaxWidth(textID, 300);
-            TextAPI.Instance.SetMaxHeight(textID, 100);
+            //var textID = TextAPI.Instance.Create();
+            //TextAPI.Instance.SetActive(textID, true);
+            //TextAPI.Instance.SetText(textID, "Mobiler Daten Computer\nName: Kayne.Walter\nWantedanzahl: 13\nGrund: Flucht(-versuch) 18:21\n(Von Kayne.Walter)\nF[334s} M[100s] A[82s]");
+            //TextAPI.Instance.SetUseMaxWidth(textID, true);
+            //TextAPI.Instance.SetUseMaxHeight(textID, true);
+            //TextAPI.Instance.SetX(textID, 500);
+            //TextAPI.Instance.SetY(textID, 300);
+            //TextAPI.Instance.SetMaxWidth(textID, 300);
+            //TextAPI.Instance.SetMaxHeight(textID, 100);
 
-            d.Block(42, "Test");
+            //d.Block(42, "Test");
 
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"Health: {p.GetHealth()}\tArmor: {p.GetArmor()}");
+
+                Parallel.For(0, 50, (i) =>
+                {
+                    Console.WriteLine($"i={i} Health: {p.GetHealth()}");
+                });
+
+                Console.WriteLine($"Health: {p.GetHealth()}");
                 Thread.Sleep(500);
             }
 
