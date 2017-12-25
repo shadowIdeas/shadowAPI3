@@ -11,8 +11,6 @@ Client::Client()
 		Sleep(20);
 	_readPipe = CreateFile(L"\\\\.\\pipe\\EBIP1", GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 
-	int error = GetLastError();
-
 	DWORD mode = PIPE_READMODE_MESSAGE;
 	SetNamedPipeHandleState(_readPipe, &mode, 0, 0);
 	SetNamedPipeHandleState(_writePipe, &mode, 0, 0);
@@ -74,6 +72,12 @@ void Client::Write(std::shared_ptr<ClientMessage> message)
 	while (id == -1)
 	{
 		Sleep(20);
+
+		if (_freed)
+		{
+			message->Invalidate();
+			return;
+		}
 
 		std::lock_guard<std::mutex> guard(_idMutex);
 		for (size_t i = 0; i < ARRAYSIZE(_events); i++)

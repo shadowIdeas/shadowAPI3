@@ -14,8 +14,6 @@ ClientMessage::~ClientMessage()
 
 void ClientMessage::SetResponse(std::shared_ptr<SerializeableQueue> response)
 {
-	if (!response)
-		DebugBreak();
 	_out = response;
 }
 
