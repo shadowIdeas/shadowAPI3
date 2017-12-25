@@ -290,7 +290,7 @@ void Font::DrawTextProxy(float x, float y, DWORD color, const std::wstring & tex
 		DrawTextInternal(x - 1, y, 0xFF000000, text.c_str());
 		DrawTextInternal(x, y + 1, 0xFF000000, text.c_str());
 		DrawTextInternal(x, y - 1, 0xFF000000, text.c_str());
-		DrawTextInternal(x, y, color, text.c_str());
+		DrawTextInternal(x, y, color, text.c_str(), {}, D3DFONT_COLORTABLE);
 		return;
 	}
 
@@ -303,7 +303,7 @@ void Font::DrawTextProxy(float x, float y, DWORD color, const std::wstring & tex
 			DrawTextInternal(x - 1, y, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
 			DrawTextInternal(x, y + 1, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
 			DrawTextInternal(x, y - 1, 0xFF000000, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
-			DrawTextInternal(x, y, color, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 });
+			DrawTextInternal(x, y, color, text.c_str(), { (int)x, 0, (int)x + maxWidth, 0 }, D3DFONT_COLORTABLE);
 		}
 		else if (useMaxHeight)
 		{
@@ -325,13 +325,13 @@ void Font::DrawTextProxy(float x, float y, DWORD color, const std::wstring & tex
 			DrawTextInternal(x - 1, y - _scrollY, 0xFF000000, text.c_str(), rect);
 			DrawTextInternal(x, y - _scrollY + 1, 0xFF000000, text.c_str(), rect);
 			DrawTextInternal(x, y - _scrollY - 1, 0xFF000000, text.c_str(), rect);
-			DrawTextInternal(x, y - _scrollY, color, text.c_str(), rect);
+			DrawTextInternal(x, y - _scrollY, color, text.c_str(), rect, D3DFONT_COLORTABLE);
 
 			DrawTextInternal(x + 1, y + padding - _scrollY, 0xFF000000, text.c_str(), rect);
 			DrawTextInternal(x - 1, y + padding - _scrollY, 0xFF000000, text.c_str(), rect);
 			DrawTextInternal(x, y + padding - _scrollY + 1, 0xFF000000, text.c_str(), rect);
 			DrawTextInternal(x, y + padding - _scrollY - 1, 0xFF000000, text.c_str(), rect);
-			DrawTextInternal(x, y + padding - _scrollY, color, text.c_str(), rect);
+			DrawTextInternal(x, y + padding - _scrollY, color, text.c_str(), rect, D3DFONT_COLORTABLE);
 
 			if (_scrollY >= padding)
 				_scrollY = 0.0f;
