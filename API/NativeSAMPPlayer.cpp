@@ -111,11 +111,12 @@ std::wstring NativeSAMPPlayer::GetFullName(const std::wstring & name)
 
 	for (size_t i = 0; i < 500; i++)
 	{
-		auto name = GetNameById(i);
-		std::transform(name.begin(), name.end(), name.begin(), ::towupper);
+		auto currentName = GetNameById(i);
+		auto upperName = currentName;
+		std::transform(upperName.begin(), upperName.end(), upperName.begin(), ::towupper);
 
-		if (name.find(searchName) != std::wstring::npos)
-			return name;
+		if (upperName.find(searchName) != std::wstring::npos)
+			return currentName;
 	}
 
 	return std::wstring();
