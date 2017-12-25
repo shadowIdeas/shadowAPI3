@@ -17,6 +17,8 @@ Client::Client()
 	SetNamedPipeHandleState(_readPipe, &mode, 0, 0);
 	SetNamedPipeHandleState(_writePipe, &mode, 0, 0);
 
+	_freed = false;
+
 	for (size_t i = 0; i < ARRAYSIZE(_events); i++)
 	{
 		_events[i] = CreateEvent(0, 1, 0, 0);
@@ -36,17 +38,24 @@ Client::~Client()
 	_running = false;
 	if (_readThread.joinable())
 		_readThread.join();
+
+	Free();
 }
 
 std::shared_ptr<ClientMessage> Client::CreateMessage(PacketIdentifier identifier)
 {
 	auto message = std::make_shared<ClientMessage>(identifier);
-
 	return message;
 }
 
 void Client::Write(std::shared_ptr<ClientMessage> message)
 {
+	if (_freed)
+	{
+		message->Invalidate();
+		return;
+	}
+
 	int id = -1;
 	{
 		std::lock_guard<std::mutex> guard(_idMutex);
@@ -88,6 +97,12 @@ void Client::Write(std::shared_ptr<ClientMessage> message)
 
 	WaitForSingleObject(_events[id], INFINITE);
 
+	if (_freed)
+	{
+		message->Invalidate();
+		return;
+	}
+
 	auto output = _out[id];
 	message->SetResponse(_out[id]);
 
@@ -100,6 +115,10 @@ int Client::FastReadInteger(PacketIdentifier identifier)
 {
 	auto message = CreateMessage(identifier);
 	Write(message);
+
+	if (message->IsInvalid())
+		return -1;
+	
 	return message->GetResponse()->ReadInteger();
 }
 
@@ -107,6 +126,10 @@ float Client::FastReadFloat(PacketIdentifier identifier)
 {
 	auto message = CreateMessage(identifier);
 	Write(message);
+
+	if (message->IsInvalid())
+		return 0.0f;
+
 	return message->GetResponse()->ReadFloat();
 }
 
@@ -114,6 +137,10 @@ bool Client::FastReadBoolean(PacketIdentifier identifier)
 {
 	auto message = CreateMessage(identifier);
 	Write(message);
+
+	if (message->IsInvalid())
+		return false;
+
 	return message->GetResponse()->ReadBoolean();
 }
 
@@ -121,6 +148,10 @@ std::wstring Client::FastReadString(PacketIdentifier identifier)
 {
 	auto message = CreateMessage(identifier);
 	Write(message);
+
+	if (message->IsInvalid())
+		return std::wstring();
+
 	return message->GetResponse()->ReadString();
 }
 
@@ -162,6 +193,7 @@ void Client::ReadThread()
 
 		if (!success || bytesRead == 0)
 		{
+			Free();
 			return;
 		}
 
@@ -174,5 +206,20 @@ void Client::ReadThread()
 
 		_out[id] = in;
 		SetEvent(_events[id]);
+	}
+}
+
+void Client::Free()
+{
+	if (!_freed)
+	{
+		_freed = true;
+
+		for (size_t i = 0; i < ARRAYSIZE(_events); i++)
+		{
+			SetEvent(_events[i]);
+			CloseHandle(_events[i]);
+		}
+
 	}
 }

@@ -153,6 +153,7 @@
     <ClInclude Include="ClientMessage.h" />
     <ClInclude Include="DialogManager.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="NativeGeneral.h" />
     <ClInclude Include="NativeSAMPPlayer.h" />
     <ClInclude Include="NativePlayer.h" />
     <ClInclude Include="NativeSAMPChat.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="DialogManager.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="NativeGeneral.cpp" />
     <ClCompile Include="NativeSAMPPlayer.cpp" />
     <ClCompile Include="NativePlayer.cpp" />
     <ClCompile Include="NativeSAMPChat.cpp" />

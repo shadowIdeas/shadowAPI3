@@ -10,10 +10,13 @@ public:
 	~ClientMessage();
 
 	void SetResponse(std::shared_ptr<SerializeableQueue> response);
+	void Invalidate();
 
 	SerializeableQueue &GetInput();
 	std::shared_ptr<SerializeableQueue> GetResponse();
+	bool IsInvalid();
 private:
 	SerializeableQueue _in;
 	std::shared_ptr<SerializeableQueue> _out;
+	bool _invalid;
 };

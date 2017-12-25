@@ -120,6 +120,9 @@
     <ClInclude Include="ServerAPISAMPVehicle.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="NativeGeneral.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -225,6 +228,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="ServerAPISAMPVehicle.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="NativeGeneral.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

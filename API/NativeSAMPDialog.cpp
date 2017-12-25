@@ -103,7 +103,7 @@ std::wstring NativeSAMPDialog::GetStringByIndex(int index)
 	if (!stringPool)
 		return std::wstring();
 
-	DWORD stringPointer = stringPool + (index * 4);
+	DWORD stringPointer = *(DWORD*)(stringPool + (index * 4));
 
 	return Utils::FromMultiByte(std::string((const char*)stringPointer));
 }
