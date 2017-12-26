@@ -22,6 +22,7 @@ public:
 
 	virtual void Present(LPDIRECT3DDEVICE9 device) override;
 	virtual void Reset(LPDIRECT3DDEVICE9 device) override;
+	virtual void OnRemove() override;
 private:
 	int _width;
 	int _height;

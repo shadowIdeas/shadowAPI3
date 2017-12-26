@@ -80,3 +80,7 @@ void OverlayBox::Present(LPDIRECT3DDEVICE9 device)
 void OverlayBox::Reset(LPDIRECT3DDEVICE9 device)
 {
 }
+
+void OverlayBox::OnRemove()
+{
+}

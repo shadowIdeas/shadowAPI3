@@ -67,7 +67,7 @@ void OverlayManager::RemoveElement(int id)
 		auto element = _elements[i];
 		if (element->GetId() == id)
 		{
-			_elements.erase(_elements.begin() + i);
+			_elements[i]->MarkAsRemoved();
 			break;
 		}
 	}
@@ -76,7 +76,8 @@ void OverlayManager::RemoveElement(int id)
 void OverlayManager::Cleanup()
 {
 	std::lock_guard<std::mutex> guard(_elementMutex);
-	_elements.clear();
+	for (size_t i = 0; i < _elements.size(); i++)
+		_elements[i]->MarkAsRemoved();
 }
 
 void OverlayManager::PresentProxy()
@@ -84,11 +85,25 @@ void OverlayManager::PresentProxy()
 	std::lock_guard<std::mutex> guard(_elementMutex);
 	auto device = (LPDIRECT3DDEVICE9)(*(DWORD*)(0xC97C28));
 
-	for (size_t i = 0; i < _elements.size(); i++)
+	for (auto iterator = _elements.begin(); iterator != _elements.end();)
 	{
-		auto element = _elements[i];
-		if (element && element->GetActive())
+		auto element = iterator->get();
+
+		if (!element)
+			continue;
+
+		if (element->IsRemoved())
+		{
+			element->OnRemove();
+			iterator = _elements.erase(iterator);
+			continue;
+		}
+
+
+		if (element->GetActive())
 			element->Present(device);
+
+		iterator++;
 	}
 }
 

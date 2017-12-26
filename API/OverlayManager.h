@@ -48,7 +48,7 @@ inline std::shared_ptr<T> OverlayManager::GetElementById(int id)
 	{
 		auto element = _elements[i];
 
-		if (element->GetId() == id)
+		if (element->GetId() == id && !element->IsRemoved())
 		{
 			std::shared_ptr<T> castedElement = std::dynamic_pointer_cast<T>(element);
 			return castedElement;

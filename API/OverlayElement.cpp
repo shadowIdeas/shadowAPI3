@@ -7,6 +7,7 @@ OverlayElement::OverlayElement(int id)
 	_x = 0;
 	_y = 0;
 	_active = false;
+	_removed = false;
 }
 
 OverlayElement::~OverlayElement()
@@ -46,4 +47,14 @@ void OverlayElement::SetX(int x)
 void OverlayElement::SetY(int y)
 {
 	_y = y;
+}
+
+bool OverlayElement::IsRemoved()
+{
+	return _removed;
+}
+
+void OverlayElement::MarkAsRemoved()
+{
+	_removed = true;
 }

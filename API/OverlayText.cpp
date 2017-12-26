@@ -7,6 +7,7 @@ OverlayText::OverlayText(int id)
 	: OverlayElement(id)
 {
 	_firstDraw = true;
+	_fontChange = false;
 	_color = 0xFFFFFFFF;
 	_size = 12;
 
@@ -47,8 +48,11 @@ void OverlayText::SetMaxHeight(int maxHeight)
 
 void OverlayText::SetSize(int size)
 {
+	if (_size == size)
+		return;
+
 	_size = size;
-	ResetText();
+	_fontChange = true;
 }
 
 void OverlayText::SetUseMaxWidth(bool useMaxWidth)
@@ -75,13 +79,14 @@ void OverlayText::GetTextExtent(int & width, int & height)
 
 void OverlayText::Present(LPDIRECT3DDEVICE9 device)
 {
-	if (_firstDraw)
+	if (_firstDraw || _fontChange)
 	{
 		_font = std::make_unique<Font>(L"Arial", _size, D3DFONT_FILTERED | D3DFONT_BOLD);
 		_font->InitDeviceObjects(device);
 		_font->RestoreDeviceObjects();
 
 		_firstDraw = false;
+		_fontChange = false;
 	}
 
 	if (_font)
@@ -93,10 +98,15 @@ void OverlayText::Present(LPDIRECT3DDEVICE9 device)
 void OverlayText::Reset(LPDIRECT3DDEVICE9 device)
 {
 	ResetText();
+	_firstDraw = true;
 }
 
 void OverlayText::ResetText()
 {
-	_font = nullptr;
-	_firstDraw = true;
+	_font.reset();
+}
+
+void OverlayText::OnRemove()
+{
+	ResetText();
 }

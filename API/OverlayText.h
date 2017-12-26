@@ -22,6 +22,7 @@ public:
 
 	virtual void Present(LPDIRECT3DDEVICE9 device) override;
 	virtual void Reset(LPDIRECT3DDEVICE9 device) override;
+	virtual void OnRemove() override;
 private:
 	std::unique_ptr<Font> _font;
 	std::wstring _text;
@@ -34,6 +35,7 @@ private:
 	int _maxHeight;
 
 	bool _firstDraw;
+	bool _fontChange;
 
 	void ResetText();
 };
