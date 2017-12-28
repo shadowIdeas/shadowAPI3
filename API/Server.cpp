@@ -37,6 +37,7 @@ void Server::RegisterFunctions()
 	// Player
 	AddFunction(PacketIdentifier::Player_GetHealth, ServerAPIPlayer::GetHealth);
 	AddFunction(PacketIdentifier::Player_GetArmor, ServerAPIPlayer::GetArmor);
+	AddFunction(PacketIdentifier::Player_GetInteriorId, ServerAPIPlayer::GetInteriorId);
 	AddFunction(PacketIdentifier::Player_GetYaw, ServerAPIPlayer::GetYaw);
 	AddFunction(PacketIdentifier::Player_GetX, ServerAPIPlayer::GetX);
 	AddFunction(PacketIdentifier::Player_GetY, ServerAPIPlayer::GetY);

@@ -9,6 +9,7 @@ enum PacketIdentifier
 	// Player
 	Player_GetHealth,
 	Player_GetArmor,
+	Player_GetInteriorId,
 	Player_GetX,
 	Player_GetY,
 	Player_GetZ,

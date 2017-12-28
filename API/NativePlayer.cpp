@@ -24,6 +24,14 @@ float NativePlayer::GetArmor()
 	return armor;
 }
 
+int NativePlayer::GetInteriorId()
+{
+	Validation(-1);
+	
+	auto interiorId = *(BYTE*)(GetPlayer() + 0x2F);
+	return (int)interiorId;
+}
+
 float NativePlayer::GetYaw()
 {
 	Validation(0.0f);

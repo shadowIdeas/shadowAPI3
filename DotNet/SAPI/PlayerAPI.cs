@@ -34,6 +34,10 @@ namespace SAPI
         private API_GetYaw API_getYaw;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int API_GetInteriorId();
+        private API_GetInteriorId API_getInteriorId;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void API_GetPosition(ref float x, ref float y, ref float z);
         private API_GetPosition API_getPosition;
 
@@ -53,6 +57,7 @@ namespace SAPI
             this.API_inVehicle = (API_InVehicle)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?InVehicle@Player@API@@YA_NXZ"), typeof(API_InVehicle));
             this.API_isDriver = (API_IsDriver)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?IsDriver@Player@API@@YA_NXZ"), typeof(API_IsDriver));
             this.API_getYaw = (API_GetYaw)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetYaw@Player@API@@YAMXZ"), typeof(API_GetYaw));
+            this.API_getInteriorId = (API_GetInteriorId)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetInteriorId@Player@API@@YAHXZ"), typeof(API_GetInteriorId));
             this.API_getPosition = (API_GetPosition)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetPosition@Player@API@@YAXAAM00@Z"), typeof(API_GetPosition));
             this.API_getCity = (API_GetCity)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetCity@Player@API@@YAXPA_WH@Z"), typeof(API_GetCity));
             this.API_getDistrict = (API_GetDistrict)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetDistrict@Player@API@@YAXPA_WH@Z"), typeof(API_GetDistrict));
@@ -86,6 +91,11 @@ namespace SAPI
         public float GetYaw()
         {
             return this.API_getYaw.Invoke();
+        }
+
+        public int GetInteriorId()
+        {
+            return API_getInteriorId.Invoke();
         }
 
         public void GetPosition(out float x, out float y, out float z)

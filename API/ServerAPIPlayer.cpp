@@ -12,6 +12,11 @@ void ServerAPIPlayer::GetArmor(SerializeableQueue & in, SerializeableQueue & out
 	out.WriteInteger((int)NativePlayer::GetArmor());
 }
 
+void ServerAPIPlayer::GetInteriorId(SerializeableQueue & in, SerializeableQueue & out)
+{
+	out.WriteInteger(NativePlayer::GetInteriorId());
+}
+
 void ServerAPIPlayer::GetYaw(SerializeableQueue & in, SerializeableQueue & out)
 {
 	out.WriteFloat(NativePlayer::GetYaw());

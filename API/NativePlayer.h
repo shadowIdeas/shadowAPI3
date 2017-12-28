@@ -4,6 +4,7 @@ static class NativePlayer
 public:
 	static float GetHealth();
 	static float GetArmor();
+	static int GetInteriorId();
 	static float GetYaw();
 	static float GetX();
 	static float GetY();

@@ -5,6 +5,7 @@ static class ServerAPIPlayer
 public:
 	static void GetHealth(SerializeableQueue &in, SerializeableQueue &out);
 	static void GetArmor(SerializeableQueue &in, SerializeableQueue &out);
+	static void GetInteriorId(SerializeableQueue &in, SerializeableQueue &out);
 	static void GetYaw(SerializeableQueue &in, SerializeableQueue &out);
 	static void GetX(SerializeableQueue &in, SerializeableQueue &out);
 	static void GetY(SerializeableQueue &in, SerializeableQueue &out);

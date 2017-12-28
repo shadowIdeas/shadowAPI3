@@ -120,6 +120,7 @@ namespace API
 	{
 		DllPublic int GetHealth();
 		DllPublic int GetArmor();
+		DllPublic int GetInteriorId();
 		DllPublic void GetCity(wchar_t *city, int length);
 		DllPublic void GetDistrict(wchar_t *district, int length);
 		DllPublic void GetPosition(float &x, float &y, float &z);
