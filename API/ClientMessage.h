@@ -1,16 +1,22 @@
 #pragma once
 #include "SerializeableQueue.h"
 #include "PacketIdentifier.h"
+#include <memory>
 
 class ClientMessage
 {
 public:
-	ClientMessage();
+	ClientMessage(PacketIdentifier identifier);
 	~ClientMessage();
 
+	void SetResponse(std::shared_ptr<SerializeableQueue> response);
+	void Invalidate();
+
 	SerializeableQueue &GetInput();
-	SerializeableQueue &GetResponse(PacketIdentifier identifier);
+	std::shared_ptr<SerializeableQueue> GetResponse();
+	bool IsInvalid();
 private:
 	SerializeableQueue _in;
-	SerializeableQueue _out;
+	std::shared_ptr<SerializeableQueue> _out;
+	bool _invalid;
 };

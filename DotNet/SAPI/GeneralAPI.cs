@@ -7,7 +7,7 @@ namespace SAPI
 {
     public class GeneralAPI : Singleton<GeneralAPI>
     {
-        private const string FILE_NAME = "SAPI";
+        private const string FILE_NAME = "API";
 
         private IntPtr handle;
 
@@ -25,7 +25,7 @@ namespace SAPI
 
         public GeneralAPI()
         {
-            if(File.Exists($"{FILE_NAME}.dll"))
+            if (File.Exists($"{FILE_NAME}.dll"))
             {
                 this.handle = Interop.LoadLibrary(FILE_NAME);
                 this.API_initialize = (API_Initialize)Marshal.GetDelegateForFunctionPointer(GetFunctionPointer("?Initialize@API@@YAHPB_W0@Z"), typeof(API_Initialize));
@@ -47,10 +47,10 @@ namespace SAPI
         /// <summary>
         /// Load the API
         /// </summary>
-        public void Initialize()
+        public int Initialize()
         {
             var path = Environment.CurrentDirectory;
-            this.API_initialize.Invoke($"{path}\\{FILE_NAME}.dll", FILE_NAME);
+            return this.API_initialize.Invoke($"{path}\\{FILE_NAME}.dll", FILE_NAME);
         }
 
         /// <summary>

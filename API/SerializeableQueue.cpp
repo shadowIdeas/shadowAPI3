@@ -74,6 +74,17 @@ void SerializeableQueue::WriteString(const std::wstring & s)
 	EnqueueNext(data);
 }
 
+void SerializeableQueue::WriteRawBytes(std::vector<BYTE>& bytes)
+{
+	for (size_t i = 0; i < bytes.size(); i++)
+		_data.push_back(bytes[i]);
+}
+
+void SerializeableQueue::WriteRawByte(BYTE b)
+{
+	_data.push_back(b);
+}
+
 int SerializeableQueue::ReadInteger()
 {
 	PacketTypeData data = DequeueNext();
