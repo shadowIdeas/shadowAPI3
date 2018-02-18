@@ -5,32 +5,28 @@ Client::Client()
 {
 	while (!WaitNamedPipe(L"\\\\.\\pipe\\EBIP0", NMPWAIT_WAIT_FOREVER))
 		Sleep(20);
-	_writePipe = CreateFile(L"\\\\.\\pipe\\EBIP0", GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
-
-	while (!WaitNamedPipe(L"\\\\.\\pipe\\EBIP1", NMPWAIT_WAIT_FOREVER))
-		Sleep(20);
-	_readPipe = CreateFile(L"\\\\.\\pipe\\EBIP1", GENERIC_READ | FILE_WRITE_ATTRIBUTES, 0, 0, OPEN_EXISTING, 0, 0);
+	_pipe = CreateFile(L"\\\\.\\pipe\\EBIP0", GENERIC_WRITE | GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
 
 	DWORD mode = PIPE_READMODE_MESSAGE;
-	SetNamedPipeHandleState(_readPipe, &mode, 0, 0);
+	SetNamedPipeHandleState(_pipe, &mode, 0, 0);
 
 	_freed = false;
 
 	for (size_t i = 0; i < ARRAYSIZE(_events); i++)
 	{
 		_events[i] = CreateEvent(0, 1, 0, 0);
+		_communicationEvents[i+2] = CreateEvent(0, 1, 0, 0);
 		_used[i] = false;
 		_out[i] = nullptr;
 	}
 
 	_running = true;
-	_readThread = std::thread(&Client::ReadThread, this);
+	_readThread = std::thread(&Client::CommunicationThread, this);
 }
 
 Client::~Client()
 {
-	CloseHandle(_readPipe);
-	CloseHandle(_writePipe);
+	CloseHandle(_pipe);
 
 	_running = false;
 	if (_readThread.joinable())
@@ -93,11 +89,10 @@ void Client::Write(std::shared_ptr<ClientMessage> message)
 	SerializeableQueue queue;
 	queue.WriteInteger(id);
 	queue.WriteRawBytes(message->GetInput().GetData());
-
+	
 	auto data = queue.GetData();
-	DWORD bytesWritten = 0;
-	WriteFile(_writePipe, data.data(), data.size(), &bytesWritten, 0);
-
+	_communicationData[id] = data;
+	SetEvent(_communicationEvents[id+2]);
 	WaitForSingleObject(_events[id], INFINITE);
 
 	if (_freed)
@@ -185,34 +180,102 @@ void Client::FastWriteString(PacketIdentifier identifier, const std::wstring & s
 	Write(message);
 }
 
-void Client::ReadThread()
+void Client::CommunicationThread()
 {
+	
+	HANDLE readEvent = CreateEvent(0, 1, 0, 0);
+	HANDLE writeEvent = CreateEvent(0, 1, 0, 0);
+
+	OVERLAPPED overlappedRead = { 0 };
+	OVERLAPPED overlappedWrite = { 0 };
+	overlappedRead.hEvent = readEvent;
+	overlappedWrite.hEvent = writeEvent;
+
+	_communicationEvents[0] = readEvent;
+	_communicationEvents[1] = writeEvent;
+
+	BYTE buffer[512 * 128] = {};
+	DWORD bytesRead = 0;
+	ReadFile(_pipe, buffer, 512 * 128, 0, &overlappedRead);
+
 	while (_running)
 	{
-		BYTE buffer[512 * 128] = {};
-		DWORD bytesRead = 0;
-
-		bool success = ReadFile(_readPipe, buffer, 512 * 128, &bytesRead, 0);
-
-		if (!success || bytesRead == 0)
+		DWORD triggeredEvent = WaitForMultipleObjects(64, _communicationEvents, false, INFINITE);
+		switch (triggeredEvent)
 		{
-			if (GetLastError() == ERROR_MORE_DATA)
-				continue;
+			case WAIT_OBJECT_0:
+			{
+				GetOverlappedResult(_pipe, &overlappedRead, &bytesRead, true);
+				ResetEvent(readEvent);
+				if (bytesRead == 0)
+				{
+					if (GetLastError() == ERROR_MORE_DATA)
+						continue;
 
-			Free();
-			return;
+					Free();
+					return;
+				}
+
+				std::vector<BYTE> bytes;
+				for (size_t i = 0; i < bytesRead; i++)
+					bytes.push_back(buffer[i]);
+
+				auto in = std::make_shared<SerializeableQueue>(bytes);
+				int id = in->ReadInteger();
+
+				_out[id] = in;
+				SetEvent(_events[id]);
+
+				ResetEvent(readEvent);
+				ReadFile(_pipe, buffer, 512 * 128, 0, &overlappedRead);
+			}
+			break;
+			case WAIT_OBJECT_0+1:
+			{
+				ResetEvent(writeEvent);
+
+				for (size_t i = 0; i < 62; i++)
+				{
+					DWORD eventIndex = i+2;
+					bool triggered = WaitForSingleObjectEx(_communicationEvents[eventIndex], 0, true) != WAIT_TIMEOUT;
+					if (triggered)
+					{
+						auto data = _communicationData[i];
+						WriteFile(_pipe, data.data(), data.size(), 0, &overlappedWrite);
+						ResetEvent(_communicationEvents[eventIndex]);
+						break;
+					}
+				}
+			}
+			case WAIT_TIMEOUT:
+			{
+
+			}
+			break;
+			case WAIT_FAILED:
+			{
+				auto error = GetLastError();
+			}
+			break;
+			default:
+			{
+				bool triggered = WaitForSingleObjectEx(writeEvent, 0, true) != WAIT_TIMEOUT;
+				if (!triggered)
+				{
+					DWORD eventIndex = triggeredEvent;
+					auto data = _communicationData[eventIndex - 2];
+					WriteFile(_pipe, data.data(), data.size(), 0, &overlappedWrite);
+
+					ResetEvent(_communicationEvents[eventIndex]);
+				}
+				
+			}
+			break;
 		}
-
-		std::vector<BYTE> bytes;
-		for (size_t i = 0; i < bytesRead; i++)
-			bytes.push_back(buffer[i]);
-
-		auto in = std::make_shared<SerializeableQueue>(bytes);
-		int id = in->ReadInteger();
-
-		_out[id] = in;
-		SetEvent(_events[id]);
 	}
+
+	CloseHandle(readEvent);
+	CloseHandle(writeEvent);
 }
 
 void Client::Free()
@@ -225,6 +288,7 @@ void Client::Free()
 		{
 			SetEvent(_events[i]);
 			CloseHandle(_events[i]);
+			CloseHandle(_communicationEvents[i + 2]);
 		}
 
 	}

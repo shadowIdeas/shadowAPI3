@@ -11,15 +11,12 @@ public:
 	~Server();
 
 private:
-	HANDLE _readPipe;
-	HANDLE _writePipe;
-
-	std::thread _readThread;
+	std::vector<std::unique_ptr<std::thread>> _readThreads;
+	std::thread _incomingThread;
 
 	std::vector<std::pair<PacketIdentifier, std::function<void(SerializeableQueue&, SerializeableQueue&)>>> _functions;
 
 	void RegisterFunctions();
-	void ReadThread();
-
+	void ReadThread(HANDLE pipe);
 	void WaitForClient();
 };

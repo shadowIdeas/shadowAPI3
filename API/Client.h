@@ -23,18 +23,19 @@ public:
 	void FastWriteBoolean(PacketIdentifier identifier, bool b);
 	void FastWriteString(PacketIdentifier identifier, const std::wstring &s);
 private:
-	HANDLE _readPipe;
-	HANDLE _writePipe;
+	HANDLE _pipe;
 	std::thread _readThread;
 	std::atomic<bool> _running;
-	HANDLE _events[128];
-	std::atomic<bool> _used[128];
+	HANDLE _events[62];
+	HANDLE _communicationEvents[64];
+	std::vector<BYTE> _communicationData[62];
+	std::atomic<bool> _used[62];
 	std::mutex _idMutex;
-	std::shared_ptr<SerializeableQueue> _out[128];
+	std::shared_ptr<SerializeableQueue> _out[62];
 	std::atomic<bool> _freed;
 
 	std::mutex _mutex;
 
-	void ReadThread();
+	void CommunicationThread();
 	void Free();
 };

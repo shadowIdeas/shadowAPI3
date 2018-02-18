@@ -18,10 +18,8 @@ Server::Server()
 {
 	RegisterFunctions();
 
-	_readPipe = CreateNamedPipeW(L"\\\\.\\pipe\\EBIP0", PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE, 1, 512 * 128, 512 * 128, 5000, 0);
-	_writePipe = CreateNamedPipeW(L"\\\\.\\pipe\\EBIP1", PIPE_ACCESS_OUTBOUND, PIPE_TYPE_MESSAGE, 1, 512 * 128, 512 * 128, 5000, 0);
-
-	_readThread = std::thread(&Server::ReadThread, this);
+	_readThreads = std::vector<std::unique_ptr<std::thread>>();
+	_incomingThread = std::thread(&Server::WaitForClient, this);
 }
 
 Server::~Server()
@@ -126,16 +124,14 @@ void Server::RegisterFunctions()
 	AddFunction(PacketIdentifier::SAMP_Dialog_BlockHasNeedBlocking, ServerAPISAMPDialog::BlockHasNeedBlocking);
 }
 
-void Server::ReadThread()
+void Server::ReadThread(HANDLE pipe)
 {
-	WaitForClient();
-	// Just run for... ever!
 	while (true)
 	{
 		BYTE buffer[512 * 128] = {};
 		DWORD bytesRead = 0;
 
-		bool success = ReadFile(_readPipe, buffer, 512 * 128, &bytesRead, 0);
+		bool success = ReadFile(pipe, buffer, 512 * 128, &bytesRead, 0);
 
 		if (!success || bytesRead == 0)
 		{
@@ -144,11 +140,10 @@ void Server::ReadThread()
 
 			if (GetLastError() == ERROR_BROKEN_PIPE)
 			{
-				DisconnectNamedPipe(_readPipe);
-				DisconnectNamedPipe(_writePipe);
-
-				WaitForClient();
-				continue;
+				FlushFileBuffers(pipe);
+				DisconnectNamedPipe(pipe);
+				CloseHandle(pipe);
+				return;
 			}
 		}
 
@@ -178,40 +173,21 @@ void Server::ReadThread()
 		// Return
 		auto data = out.GetData();
 		DWORD bytesWritten = 0;
-		WriteFile(_writePipe, data.data(), data.size(), &bytesWritten, 0);
+		WriteFile(pipe, data.data(), data.size(), &bytesWritten, 0);
 	}
 }
 
 void Server::WaitForClient()
 {
-	OverlayManager::GetInstance().Cleanup();
-	bool connected = false;
-
-	while (!connected)
+	while (true)
 	{
-		connected = ConnectNamedPipe(_readPipe, 0);
-		if (!connected)
+		bool connected = false;
+		while (!connected)
 		{
-			DWORD error = GetLastError();
-			if (error == ERROR_PIPE_CONNECTED)
-			{
-				connected = true;
-			}
-		}
-	}
-
-	connected = false;
-	while (!connected)
-	{
-		connected = ConnectNamedPipe(_writePipe, 0);
-
-		if (!connected)
-		{
-			DWORD error = GetLastError();
-			if (error == ERROR_PIPE_CONNECTED)
-			{
-				connected = true;
-			}
+			HANDLE pipe = CreateNamedPipeW(L"\\\\.\\pipe\\EBIP0", PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE, PIPE_UNLIMITED_INSTANCES, 512 * 128, 512 * 128, 0, 0);
+			connected = ConnectNamedPipe(pipe, 0) ? true : (GetLastError() == ERROR_PIPE_CONNECTED);
+			if (connected)
+				_readThreads.push_back(std::make_unique<std::thread>(&Server::ReadThread, this, pipe));
 		}
 	}
 }

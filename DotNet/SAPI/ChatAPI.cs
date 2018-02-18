@@ -62,21 +62,36 @@ namespace SAPI
             this.API_setCursorPosition2 = (API_SetCursorPosition2)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?SetCursorPosition@Chat@SAMP@API@@YAXHH@Z"), typeof(API_SetCursorPosition2));
         }
 
+        /// <summary>
+        /// Add an buffer message (Arrow keys when chat is open).
+        /// </summary>
+        /// <param name="message">The message to be added</param>
         public void AddBufferMessage(string message)
         {
             this.API_addBufferMessage.Invoke(message);
         }
 
+        /// <summary>
+        /// Add an message.
+        /// </summary>
+        /// <param name="message">The message to be added</param>
         public void AddMessage(string message)
         {
             this.API_addMessage.Invoke(message);
         }
 
+        /// <summary>
+        /// Clear the input.
+        /// </summary>
         public void Clear()
         {
             this.API_clear.Invoke();
         }
 
+        /// <summary>
+        /// Get the input.
+        /// </summary>
+        /// <returns>The text that was written into the chat input box</returns>
         public string GetText()
         {
             var stringBuilder = new StringBuilder(1024);
@@ -85,26 +100,48 @@ namespace SAPI
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Set the input
+        /// </summary>
+        /// <param name="text">The text that is in the chat input box</param>
         public void SetText(string text)
         {
             this.API_setText(text);
         }
 
+        /// <summary>
+        /// Checks if the chat is open.
+        /// </summary>
+        /// <returns>True if it's open, otherwise false</returns>
         public bool IsOpen()
         {
             return this.API_isOpen.Invoke();
         }
 
+        /// <summary>
+        /// Toggle the chat input box.
+        /// </summary>
+        /// <param name="open">The open state of the input box</param>
         public void Toggle(bool open)
         {
             this.API_toggle.Invoke(open);
         }
 
+        /// <summary>
+        /// Send and message or command to the server.
+        /// </summary>
+        /// <param name="message">The message or command to be send to the server</param>
         public void Send(string message)
         {
             this.API_send.Invoke(message);
         }
 
+        /// <summary>
+        /// Set the cursor of the input box.
+        /// If <paramref name="begin"/> and <paramref name="end"/> are the same, there will be no selection and it's just an position.
+        /// </summary>
+        /// <param name="begin">The begin of the cursor selection</param>
+        /// <param name="end">The end of the cursor selection</param>
         public void SetCursorPosition(int begin, int end)
         {
             this.API_setCursorPosition1.Invoke(begin, end);

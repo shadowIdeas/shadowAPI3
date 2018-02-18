@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>shadowIdeas</authors>
+    <owners>DogeAmazed</owners>
+    <licenseUrl>https://github.com/shadowIdeas/shadowAPI3/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/shadowIdeas/shadowAPI3</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wrapper for the shadowAPI3</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright DogeAmazed 2018</copyright>
+    <tags>SAMP API</tags>
+  </metadata>
+</package>
