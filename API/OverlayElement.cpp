@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "OverlayElement.h"
 
-OverlayElement::OverlayElement(int id)
+OverlayElement::OverlayElement(int clientId, int id)
 {
+	_clientId = clientId;
 	_id = id;
 	_x = 0;
 	_y = 0;
@@ -12,6 +13,11 @@ OverlayElement::OverlayElement(int id)
 
 OverlayElement::~OverlayElement()
 {
+}
+
+int OverlayElement::GetClientId()
+{
+	return _clientId;
 }
 
 int OverlayElement::GetId()

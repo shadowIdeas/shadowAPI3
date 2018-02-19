@@ -2,12 +2,12 @@
 #include "ServerAPISAMPVehicle.h"
 #include "NativeSAMPVehicle.h"
 
-void ServerAPISAMPVehicle::GetNumberplate(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPVehicle::GetNumberplate)
 {
 	out.WriteString(NativeSAMPVehicle::GetNumberplate());
 }
 
-void ServerAPISAMPVehicle::ToggleSiren(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPVehicle::ToggleSiren)
 {
 	NativeSAMPVehicle::ToggleSiren(in.ReadBoolean());
 }

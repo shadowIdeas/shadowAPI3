@@ -12,7 +12,7 @@
 #include "ServerAPISAMPChat.h"
 #include "ServerAPISAMPDialog.h"
 
-#define AddFunction(identifier, func) _functions.push_back(std::make_pair<PacketIdentifier, std::function<void(SerializeableQueue&, SerializeableQueue&)>>(identifier, &func))
+#define AddFunction(identifier, func) _functions.push_back(std::make_pair<PacketIdentifier, std::function<void(int, SerializeableQueue&, SerializeableQueue&)>>(identifier, &func))
 
 Server::Server()
 {
@@ -20,6 +20,8 @@ Server::Server()
 
 	_readThreads = std::vector<std::unique_ptr<std::thread>>();
 	_incomingThread = std::thread(&Server::WaitForClient, this);
+
+	_clientId = 0;
 }
 
 Server::~Server()
@@ -126,6 +128,7 @@ void Server::RegisterFunctions()
 
 void Server::ReadThread(HANDLE pipe)
 {
+	int clientId = GenerateClientId();
 	while (true)
 	{
 		BYTE buffer[512 * 128] = {};
@@ -143,6 +146,8 @@ void Server::ReadThread(HANDLE pipe)
 				FlushFileBuffers(pipe);
 				DisconnectNamedPipe(pipe);
 				CloseHandle(pipe);
+				
+				OverlayManager::GetInstance().Cleanup(clientId);
 				return;
 			}
 		}
@@ -165,7 +170,7 @@ void Server::ReadThread(HANDLE pipe)
 			auto pair = _functions[i];
 			if (pair.first == identifier)
 			{
-				pair.second(in, out);
+				pair.second(clientId, in, out);
 				break;
 			}
 		}
@@ -190,4 +195,10 @@ void Server::WaitForClient()
 				_readThreads.push_back(std::make_unique<std::thread>(&Server::ReadThread, this, pipe));
 		}
 	}
+}
+
+int Server::GenerateClientId()
+{
+	std::lock_guard<std::mutex> guard(_clientMutex);
+	return _clientId++;
 }

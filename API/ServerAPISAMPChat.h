@@ -4,21 +4,21 @@
 static class ServerAPISAMPChat
 {
 public:
-	static void Send(SerializeableQueue &in, SerializeableQueue &out);
-	static void AddMessage1(SerializeableQueue &in, SerializeableQueue &out);
-	static void AddMessage2(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(Send);
+	SerializeFunctionH(AddMessage1);
+	SerializeFunctionH(AddMessage2);
 
-	static void GetText(SerializeableQueue &in, SerializeableQueue &out);
-	static void SetText(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(GetText);
+	SerializeFunctionH(SetText);
 
-	static void GetBufferMessage(SerializeableQueue &in, SerializeableQueue &out);
-	static void AddBufferMessage(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(GetBufferMessage);
+	SerializeFunctionH(AddBufferMessage);
 
-	static void SetCursorPosition(SerializeableQueue &in, SerializeableQueue &out);
-	static void SetCursorPosition2(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(SetCursorPosition);
+	SerializeFunctionH(SetCursorPosition2);
 
-	static void Toggle(SerializeableQueue &in, SerializeableQueue &out);
-	static void Clear(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(Toggle);
+	SerializeFunctionH(Clear);
 
-	static void IsOpen(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(IsOpen);
 };

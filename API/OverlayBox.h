@@ -13,7 +13,7 @@ struct Vertex
 class OverlayBox : public OverlayElement
 {
 public:
-	OverlayBox(int id);
+	OverlayBox(int clientId, int id);
 	~OverlayBox();
 
 	void SetWidth(int width);

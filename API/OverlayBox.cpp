@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "OverlayBox.h"
 
-OverlayBox::OverlayBox(int id)
-	: OverlayElement(id)
+OverlayBox::OverlayBox(int clientId, int id)
+	: OverlayElement(clientId, id)
 {
 	_width = 0;
 	_height = 0;

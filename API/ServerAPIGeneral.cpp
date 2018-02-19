@@ -2,18 +2,18 @@
 #include "ServerAPIGeneral.h"
 #include "NativeGeneral.h"
 
-void ServerAPIGeneral::Useless(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIGeneral::Useless)
 {
 	int i = in.ReadInteger();
 	out.WriteInteger(i * 2);
 }
 
-void ServerAPIGeneral::Useless1(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIGeneral::Useless1)
 {
 	out.WriteInteger(18);
 }
 
-void ServerAPIGeneral::GetWeatherId(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIGeneral::GetWeatherId)
 {
 	out.WriteInteger(NativeGeneral::GetWeatherId());
 }

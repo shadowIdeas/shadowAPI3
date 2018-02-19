@@ -59,13 +59,13 @@ OverlayManager & OverlayManager::GetInstance()
 	return instance;
 }
 
-void OverlayManager::RemoveElement(int id)
+void OverlayManager::RemoveElement(int clientId, int id)
 {
 	std::lock_guard<std::mutex> guard(_elementMutex);
 	for (size_t i = 0; i < _elements.size(); i++)
 	{
 		auto element = _elements[i];
-		if (element->GetId() == id)
+		if (element->GetId() == id && element->GetClientId() == clientId)
 		{
 			_elements[i]->MarkAsRemoved();
 			break;
@@ -73,11 +73,14 @@ void OverlayManager::RemoveElement(int id)
 	}
 }
 
-void OverlayManager::Cleanup()
+void OverlayManager::Cleanup(int clientId)
 {
 	std::lock_guard<std::mutex> guard(_elementMutex);
 	for (size_t i = 0; i < _elements.size(); i++)
-		_elements[i]->MarkAsRemoved();
+	{
+		if(_elements[i]->GetClientId() == clientId)
+			_elements[i]->MarkAsRemoved();
+	}
 }
 
 void OverlayManager::PresentProxy()

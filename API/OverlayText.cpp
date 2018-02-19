@@ -3,8 +3,8 @@
 
 #include "NativeSAMPChat.h"
 
-OverlayText::OverlayText(int id)
-	: OverlayElement(id)
+OverlayText::OverlayText(int clientId, int id)
+	: OverlayElement(clientId, id)
 {
 	_firstDraw = true;
 	_fontChange = false;

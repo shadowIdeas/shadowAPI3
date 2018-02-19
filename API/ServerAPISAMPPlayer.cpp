@@ -2,27 +2,27 @@
 #include "ServerAPISAMPPlayer.h"
 #include "NativeSAMPPlayer.h"
 
-void ServerAPISAMPPlayer::GetLocalName(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPPlayer::GetLocalName)
 {
 	out.WriteString(NativeSAMPPlayer::GetLocalName());
 }
 
-void ServerAPISAMPPlayer::GetLocalId(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPPlayer::GetLocalId)
 {
 	out.WriteInteger(NativeSAMPPlayer::GetLocalId());
 }
 
-void ServerAPISAMPPlayer::GetNameById(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPPlayer::GetNameById)
 {
 	out.WriteString(NativeSAMPPlayer::GetNameById(in.ReadInteger()));
 }
 
-void ServerAPISAMPPlayer::GetIdByName(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPPlayer::GetIdByName)
 {
 	out.WriteInteger(NativeSAMPPlayer::GetIdByName(in.ReadString()));
 }
 
-void ServerAPISAMPPlayer::GetFullName(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPPlayer::GetFullName)
 {
 	out.WriteString(NativeSAMPPlayer::GetFullName(in.ReadString()));
 }

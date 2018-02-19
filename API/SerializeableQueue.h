@@ -1,6 +1,9 @@
 #pragma once
 #include "PacketTypeData.h"
 
+#define SerializeFunction(name) void name(int clientId, SerializeableQueue &in, SerializeableQueue &out)
+#define SerializeFunctionH(name) static void name(int clientId, SerializeableQueue &in, SerializeableQueue &out)
+
 class SerializeableQueue
 {
 public:

@@ -2,59 +2,59 @@
 #include "ServerAPIPlayer.h"
 #include "NativePlayer.h"
 
-void ServerAPIPlayer::GetHealth(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetHealth)
 {
 	out.WriteInteger((int)NativePlayer::GetHealth());
 }
 
-void ServerAPIPlayer::GetArmor(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetArmor)
 {
 	out.WriteInteger((int)NativePlayer::GetArmor());
 }
 
-void ServerAPIPlayer::GetInteriorId(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetInteriorId)
 {
 	out.WriteInteger(NativePlayer::GetInteriorId());
 }
 
-void ServerAPIPlayer::GetYaw(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetYaw)
 {
 	out.WriteFloat(NativePlayer::GetYaw());
 }
 
-void ServerAPIPlayer::GetX(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetX)
 {
 	out.WriteFloat(NativePlayer::GetX());
 }
 
-void ServerAPIPlayer::GetY(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetY)
 {
 	out.WriteFloat(NativePlayer::GetY());
 }
 
-void ServerAPIPlayer::GetZ(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetZ)
 {
 	out.WriteFloat(NativePlayer::GetZ());
 }
 
-void ServerAPIPlayer::GetPosition(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::GetPosition)
 {
 	out.WriteFloat(NativePlayer::GetX());
 	out.WriteFloat(NativePlayer::GetY());
 	out.WriteFloat(NativePlayer::GetZ());
 }
 
-void ServerAPIPlayer::InInterior(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::InInterior)
 {
 	out.WriteBoolean(NativePlayer::InInterior());
 }
 
-void ServerAPIPlayer::InVehicle(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::InVehicle)
 {
 	out.WriteBoolean(NativePlayer::InVehicle());
 }
 
-void ServerAPIPlayer::IsDriver(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIPlayer::IsDriver)
 {
 	out.WriteBoolean(NativePlayer::IsDriver());
 }

@@ -4,9 +4,9 @@
 static class ServerAPISAMPPlayer
 {
 public:
-	static void GetLocalName(SerializeableQueue &in, SerializeableQueue &out);
-	static void GetLocalId(SerializeableQueue &in, SerializeableQueue &out);
-	static void GetNameById(SerializeableQueue &in, SerializeableQueue &out);
-	static void GetIdByName(SerializeableQueue &in, SerializeableQueue &out);
-	static void GetFullName(SerializeableQueue &in, SerializeableQueue &out);
+	SerializeFunctionH(GetLocalName);
+	SerializeFunctionH(GetLocalId);
+	SerializeFunctionH(GetNameById);
+	SerializeFunctionH(GetIdByName);
+	SerializeFunctionH(GetFullName);
 };

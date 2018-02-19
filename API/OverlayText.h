@@ -7,7 +7,7 @@
 class OverlayText : public OverlayElement
 {
 public:
-	OverlayText(int id);
+	OverlayText(int clientId, int id);
 	~OverlayText();
 
 	const std::wstring &GetText();

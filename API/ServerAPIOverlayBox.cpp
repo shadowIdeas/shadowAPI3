@@ -3,68 +3,68 @@
 #include "OverlayManager.h"
 #include "OverlayBox.h"
 
-void ServerAPIOverlayBox::Create(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::Create)
 {
-	auto box = OverlayManager::GetInstance().CreateElement<OverlayBox>();
+	auto box = OverlayManager::GetInstance().CreateElement<OverlayBox>(clientId);
 	out.WriteInteger(box->GetId());
 }
 
-void ServerAPIOverlayBox::Delete(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::Delete)
 {
 	int id = in.ReadInteger();
-	OverlayManager::GetInstance().RemoveElement(id);
+	OverlayManager::GetInstance().RemoveElement(clientId, id);
 }
 
-void ServerAPIOverlayBox::SetColor(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetColor)
 {
 	int id = in.ReadInteger();
 	int color = in.ReadInteger();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetColor(color);
 }
 
-void ServerAPIOverlayBox::SetX(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetX)
 {
 	int id = in.ReadInteger();
 	int x = in.ReadInteger();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetX(x);
 }
 
-void ServerAPIOverlayBox::SetY(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetY)
 {
 	int id = in.ReadInteger();
 	int y = in.ReadInteger();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetY(y);
 }
 
-void ServerAPIOverlayBox::SetWidth(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetWidth)
 {
 	int id = in.ReadInteger();
 	int width = in.ReadInteger();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetWidth(width);
 }
 
-void ServerAPIOverlayBox::SetHeight(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetHeight)
 {
 	int id = in.ReadInteger();
 	int height = in.ReadInteger();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetHeight(height);
 }
 
-void ServerAPIOverlayBox::SetActive(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPIOverlayBox::SetActive)
 {
 	int id = in.ReadInteger();
 	bool active = in.ReadBoolean();
-	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(id);
+	auto element = OverlayManager::GetInstance().GetElementById<OverlayBox>(clientId, id);
 	if (element)
 		element->SetActive(active);
 }

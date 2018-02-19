@@ -2,21 +2,21 @@
 #include "ServerAPISAMPChat.h"
 #include "NativeSAMPChat.h"
 
-void ServerAPISAMPChat::Send(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::Send)
 {
 	std::wstring text = in.ReadString();
-
+	
 	NativeSAMPChat::Send(text);
 }
 
-void ServerAPISAMPChat::AddMessage1(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::AddMessage1)
 {
 	std::wstring text = in.ReadString();
 
 	NativeSAMPChat::AddMessage(text);
 }
 
-void ServerAPISAMPChat::AddMessage2(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::AddMessage2)
 {
 	std::wstring text = in.ReadString();
 	int color = in.ReadInteger();
@@ -24,49 +24,49 @@ void ServerAPISAMPChat::AddMessage2(SerializeableQueue & in, SerializeableQueue 
 	NativeSAMPChat::AddMessage(text, color);
 }
 
-void ServerAPISAMPChat::GetText(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::GetText)
 {
 	out.WriteString(NativeSAMPChat::GetText());
 }
 
-void ServerAPISAMPChat::SetText(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::SetText)
 {
 	NativeSAMPChat::SetText(in.ReadString());
 }
 
-void ServerAPISAMPChat::GetBufferMessage(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::GetBufferMessage)
 {
 	out.WriteString(NativeSAMPChat::GetBufferMessage(in.ReadInteger()));
 }
 
-void ServerAPISAMPChat::AddBufferMessage(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::AddBufferMessage)
 {
 	NativeSAMPChat::AddBufferMessage(in.ReadString());
 }
 
-void ServerAPISAMPChat::SetCursorPosition(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::SetCursorPosition)
 {
 	NativeSAMPChat::SetCursorPosition(in.ReadInteger());
 }
 
-void ServerAPISAMPChat::SetCursorPosition2(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::SetCursorPosition2)
 {
 	int indexStart = in.ReadInteger();
 	int indexEnd = in.ReadInteger();
 	NativeSAMPChat::SetCursorPosition(indexStart, indexEnd);
 }
 
-void ServerAPISAMPChat::Toggle(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::Toggle)
 {
 	NativeSAMPChat::Toggle(in.ReadBoolean());
 }
 
-void ServerAPISAMPChat::Clear(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::Clear)
 {
 	NativeSAMPChat::Clear();
 }
 
-void ServerAPISAMPChat::IsOpen(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPChat::IsOpen)
 {
 	out.WriteBoolean(NativeSAMPChat::IsOpen());
 }

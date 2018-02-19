@@ -2,86 +2,86 @@
 #include "ServerAPISAMPDialog.h"
 #include "NativeSAMPDialog.h"
 
-void ServerAPISAMPDialog::GetText(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::GetText)
 {
 	out.WriteString(NativeSAMPDialog::GetText());
 }
 
-void ServerAPISAMPDialog::SetText(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::SetText)
 {
 	NativeSAMPDialog::SetText(in.ReadString());
 }
 
-void ServerAPISAMPDialog::SetCursorPosition1(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::SetCursorPosition1)
 {
 	NativeSAMPDialog::SetCursorPosition(in.ReadInteger());
 }
 
-void ServerAPISAMPDialog::SetCursorPosition2(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::SetCursorPosition2)
 {
 	int indexStart = in.ReadInteger();
 	int indexEnd = in.ReadInteger();
 	NativeSAMPDialog::SetCursorPosition(indexStart, indexEnd);
 }
 
-void ServerAPISAMPDialog::GetId(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::GetId)
 {
 	out.WriteInteger(NativeSAMPDialog::GetId());
 }
 
-void ServerAPISAMPDialog::GetStringCount(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::GetStringCount)
 {
 	out.WriteInteger(NativeSAMPDialog::GetStringCount());
 }
 
-void ServerAPISAMPDialog::GetStringByIndex(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::GetStringByIndex)
 {
 	out.WriteString(NativeSAMPDialog::GetStringByIndex(in.ReadInteger()));
 }
 
-void ServerAPISAMPDialog::Clear(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::Clear)
 {
 	NativeSAMPDialog::Clear();
 }
 
-void ServerAPISAMPDialog::Close(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::Close)
 {
 	NativeSAMPDialog::Close(in.ReadInteger());
 }
 
-void ServerAPISAMPDialog::SelectIndex(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::SelectIndex)
 {
 	NativeSAMPDialog::SelectIndex(in.ReadInteger());
 }
 
-void ServerAPISAMPDialog::IsOpen(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::IsOpen)
 {
 	out.WriteBoolean(NativeSAMPDialog::IsOpen());
 }
 
-void ServerAPISAMPDialog::BlockGetCaption(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::BlockGetCaption)
 {
 	out.WriteString(NativeSAMPDialog::BlockGetCaption());
 }
 
-void ServerAPISAMPDialog::BlockGetText(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::BlockGetText)
 {
 	out.WriteString(NativeSAMPDialog::BlockGetText());
 }
 
-void ServerAPISAMPDialog::Block(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::Block)
 {
 	int id = in.ReadInteger();
 	std::wstring string = in.ReadString();
 	NativeSAMPDialog::Block(id, string);
 }
 
-void ServerAPISAMPDialog::BlockHasBlockedDialog(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::BlockHasBlockedDialog)
 {
 	out.WriteBoolean(NativeSAMPDialog::BlockHasBlockedDialog());
 }
 
-void ServerAPISAMPDialog::BlockHasNeedBlocking(SerializeableQueue & in, SerializeableQueue & out)
+SerializeFunction(ServerAPISAMPDialog::BlockHasNeedBlocking)
 {
 	out.WriteBoolean(NativeSAMPDialog::BlockHasNeedBlocking());
 }
