@@ -13,6 +13,7 @@ namespace API
 	namespace Other
 	{
 		DllPublic int GetWeatherID();
+		DllPublic int SetKey(int key, bool pressed);
 		DllPublic int Useless(int useless);
 		DllPublic int Useless1();
 	}

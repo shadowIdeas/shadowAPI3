@@ -5,6 +5,7 @@ enum PacketIdentifier
 	Useless,
 	Useless1,
 	General_GetWeatherId,
+	General_SetKey,
 
 	// Player
 	Player_GetHealth,

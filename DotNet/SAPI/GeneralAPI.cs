@@ -23,6 +23,10 @@ namespace SAPI
         private delegate int API_GetWeatherID();
         private API_GetWeatherID API_getWeatherID;
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void API_SetKey(int key, bool pressed);
+        private API_SetKey API_setKey;
+
         public GeneralAPI()
         {
             if (File.Exists($"{FILE_NAME}.dll"))
@@ -31,6 +35,7 @@ namespace SAPI
                 this.API_initialize = (API_Initialize)Marshal.GetDelegateForFunctionPointer(GetFunctionPointer("?Initialize@API@@YAHPB_W0@Z"), typeof(API_Initialize));
                 this.API_resetInitialize = (API_ResetInitialize)Marshal.GetDelegateForFunctionPointer(GetFunctionPointer("?ResetInitialize@API@@YAXXZ"), typeof(API_ResetInitialize));
                 this.API_getWeatherID = (API_GetWeatherID)Marshal.GetDelegateForFunctionPointer(GetFunctionPointer("?GetWeatherID@Other@API@@YAHXZ"), typeof(API_GetWeatherID));
+                this.API_setKey = (API_SetKey)Marshal.GetDelegateForFunctionPointer(GetFunctionPointer("?SetKey@Other@API@@YAHH_N@Z"), typeof(API_SetKey));
             }
             else
             {
@@ -64,6 +69,11 @@ namespace SAPI
         public int GetWeatherID()
         {
             return this.API_getWeatherID();
+        }
+
+        public void SetKey(int key, bool pressed)
+        {
+            this.API_setKey.Invoke(key, pressed);
         }
     }
 }

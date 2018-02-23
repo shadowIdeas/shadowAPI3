@@ -7,4 +7,5 @@ public:
 	SerializeFunctionH(Useless);
 	SerializeFunctionH(Useless1);
 	SerializeFunctionH(GetWeatherId);
+	SerializeFunctionH(SetKey);
 };

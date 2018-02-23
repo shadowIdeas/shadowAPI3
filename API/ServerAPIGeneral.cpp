@@ -17,3 +17,10 @@ SerializeFunction(ServerAPIGeneral::GetWeatherId)
 {
 	out.WriteInteger(NativeGeneral::GetWeatherId());
 }
+
+SerializeFunction(ServerAPIGeneral::SetKey)
+{
+	int key = in.ReadInteger();
+	bool pressed = in.ReadBoolean();
+	NativeGeneral::SetKey(key, pressed);
+}
