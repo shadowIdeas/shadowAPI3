@@ -30,6 +30,11 @@ namespace SAPI
         private API_IsDriver API_isDriver;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        private delegate bool API_IsFreezed();
+        private API_IsFreezed API_isFreezed;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate float API_GetYaw();
         private API_GetYaw API_getYaw;
 
@@ -56,6 +61,7 @@ namespace SAPI
             this.API_inInterior = (API_InInterior)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?InInterior@Player@API@@YA_NXZ"), typeof(API_InInterior));
             this.API_inVehicle = (API_InVehicle)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?InVehicle@Player@API@@YA_NXZ"), typeof(API_InVehicle));
             this.API_isDriver = (API_IsDriver)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?IsDriver@Player@API@@YA_NXZ"), typeof(API_IsDriver));
+            this.API_isFreezed = (API_IsFreezed)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?IsFreezed@Player@API@@YA_NXZ"), typeof(API_IsFreezed));
             this.API_getYaw = (API_GetYaw)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetYaw@Player@API@@YAMXZ"), typeof(API_GetYaw));
             this.API_getInteriorId = (API_GetInteriorId)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetInteriorId@Player@API@@YAHXZ"), typeof(API_GetInteriorId));
             this.API_getPosition = (API_GetPosition)Marshal.GetDelegateForFunctionPointer(GeneralAPI.Instance.GetFunctionPointer("?GetPosition@Player@API@@YAXAAM00@Z"), typeof(API_GetPosition));
@@ -86,6 +92,11 @@ namespace SAPI
         public bool IsDriver()
         {
             return this.API_isDriver.Invoke();
+        }
+
+        public bool IsFreezed()
+        {
+            return this.API_isFreezed.Invoke();
         }
 
         public float GetYaw()

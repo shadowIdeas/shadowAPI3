@@ -19,6 +19,7 @@ enum PacketIdentifier
 	Player_InInterior,
 	Player_InVehicle,
 	Player_IsDriver,
+	Player_IsFreezed,
 
 	// Vehicle
 	Vehicle_GetSpeed,

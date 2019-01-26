@@ -58,3 +58,8 @@ SerializeFunction(ServerAPIPlayer::IsDriver)
 {
 	out.WriteBoolean(NativePlayer::IsDriver());
 }
+
+SerializeFunction(ServerAPIPlayer::IsFreezed)
+{
+	out.WriteBoolean(NativePlayer::IsFreezed());
+}

@@ -130,6 +130,7 @@ namespace API
 		DllPublic bool InInterior();
 		DllPublic bool InVehicle();
 		DllPublic bool IsDriver();
+		DllPublic bool IsFreezed();
 	}
 
 	namespace Vehicle

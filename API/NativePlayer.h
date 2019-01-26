@@ -14,6 +14,7 @@ public:
 	static bool InInterior();
 
 	static bool IsDriver();
+	static bool IsFreezed();
 
 	static bool WantToGetOutOfCar();
 

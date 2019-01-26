@@ -103,6 +103,12 @@ bool NativePlayer::IsDriver()
 	return true;
 }
 
+bool NativePlayer::IsFreezed()
+{
+	Validation(false);
+	return !(*(DWORD*)(0x8A6160) & 1);
+}
+
 bool NativePlayer::WantToGetOutOfCar()
 {
 	Validation(false);

@@ -14,4 +14,5 @@ public:
 	SerializeFunctionH(InInterior);
 	SerializeFunctionH(InVehicle);
 	SerializeFunctionH(IsDriver);
+	SerializeFunctionH(IsFreezed);
 };

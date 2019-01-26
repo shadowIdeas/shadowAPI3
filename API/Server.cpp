@@ -47,6 +47,7 @@ void Server::RegisterFunctions()
 	AddFunction(PacketIdentifier::Player_InInterior, ServerAPIPlayer::InInterior);
 	AddFunction(PacketIdentifier::Player_InVehicle, ServerAPIPlayer::InVehicle);
 	AddFunction(PacketIdentifier::Player_IsDriver, ServerAPIPlayer::IsDriver);
+	AddFunction(PacketIdentifier::Player_IsFreezed, ServerAPIPlayer::IsFreezed);
 
 	// Vehicle
 	AddFunction(PacketIdentifier::Vehicle_GetSpeed, ServerAPIVehicle::GetSpeed);
